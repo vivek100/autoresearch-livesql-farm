@@ -1,0 +1,94 @@
+{
+  "trace_id": "trace_spider_51",
+  "question_id": "spider_51",
+  "question": "Find number of pets owned by students who are older than 20.",
+  "db_id": "pets_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': None}",
+        "inputs": {
+          "table_name": null
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:2b990a30-effb-12dc-dead-103d64b63f57",
+          "checkpoint_ns": "tools:2b990a30-effb-12dc-dead-103d64b63f57"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 3, \"tables\": [{\"table\": \"Has_Pet\", \"columns\": [{\"cid\": 0, \"name\": \"StuID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 1, \"name\": \"PetID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"Student\", \"from_col\": \"StuID\", \"to_col\": \"StuID\"}, {\"id\": 1, \"seq\": 0, \"ref_table\": \"Pets\", \"from_col\": \"PetID\", \"to_col\": \"PetID\"}]}, {\"table\": \"Pets\", \"columns\": [{\"cid\": 0, \"name\": \"PetID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"PetType\", \"type\": \"VARCHAR(20)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"pet_age\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"weight\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}, {\"table\": \"Student\", \"columns\": [{\"cid\": 0, \"name\": \"StuID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"LName\", \"type\": \"VARCHAR(12)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Fname\", \"type\": \"VARCHAR(12)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Age\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Sex\", \"type\": \"VARCHAR(1)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Major\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Advisor\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 7, \"name\": \"city_code\", \"type\": \"VARCHAR(3)\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='af769dde-a100-47b2-b2e3-e192ec159fa7' tool_call_id='RNpJ2WUae'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT COUNT(*) FROM Has_Pet WHERE StuID IN (SELECT StuID FROM Student WHERE Age > 20);'}",
+        "inputs": {
+          "sql": "SELECT COUNT(*) FROM Has_Pet WHERE StuID IN (SELECT StuID FROM Student WHERE Age > 20);"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:4ffb9cbd-f99a-5b3f-da8f-81b338476314",
+          "checkpoint_ns": "tools:4ffb9cbd-f99a-5b3f-da8f-81b338476314"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"COUNT(*)\"], \"preview_rows\": [[0]], \"dtypes\": {\"COUNT(*)\": \"int\"}, \"executed_sql\": \"SELECT COUNT(*) FROM Has_Pet WHERE StuID IN (SELECT StuID FROM Student WHERE Age > 20);\"}' name='execute_sql' id='344c6e00-3289-40b1-9e3a-aea33a5eb468' tool_call_id='GrhV0OH74'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT COUNT(*) FROM Has_Pet WHERE StuID IN (SELECT StuID FROM Student WHERE Age > 20);",
+    "answer_raw": 0,
+    "answer_normalized": 0,
+    "answer_text": "No pets are owned by students older than 20."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": 0
+  }
+}

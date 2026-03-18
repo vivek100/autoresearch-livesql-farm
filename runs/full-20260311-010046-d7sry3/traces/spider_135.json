@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_spider_135",
+  "question_id": "spider_135",
+  "question": "What is the average horsepower of the cars before 1980?",
+  "db_id": "car_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'cars'}",
+        "inputs": {
+          "table_name": "cars"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:5fa46c9d-7896-d26d-6d75-ea63d15a6618",
+          "checkpoint_ns": "tools:5fa46c9d-7896-d26d-6d75-ea63d15a6618"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: cars\", \"available_tables\": [\"car_makers\", \"car_names\", \"cars_data\", \"continents\", \"countries\", \"model_list\"]}' name='describe_schema' id='7a44c27b-9155-4c31-85d0-a714a1fc4487' tool_call_id='sFxr6JuxF'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'cars_data'}",
+        "inputs": {
+          "table_name": "cars_data"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:edd4b32b-c5c7-7f87-3fba-d8edfa6492f2",
+          "checkpoint_ns": "tools:edd4b32b-c5c7-7f87-3fba-d8edfa6492f2"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"cars_data\", \"columns\": [{\"cid\": 0, \"name\": \"Id\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"MPG\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Cylinders\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Edispl\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Horsepower\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Weight\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Accelerate\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 7, \"name\": \"Year\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"car_names\", \"from_col\": \"Id\", \"to_col\": \"MakeId\"}]}]}' name='describe_schema' id='864aa516-5cf4-49b4-92de-4260005654e8' tool_call_id='3EpDQAFhw'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT AVG(Horsepower) FROM cars_data WHERE Year < 1980;'}",
+        "inputs": {
+          "sql": "SELECT AVG(Horsepower) FROM cars_data WHERE Year < 1980;"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:00c82d0e-0cf3-f429-6899-a59dcc101644",
+          "checkpoint_ns": "tools:00c82d0e-0cf3-f429-6899-a59dcc101644"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"AVG(Horsepower)\"], \"preview_rows\": [[111.13291139240506]], \"dtypes\": {\"AVG(Horsepower)\": \"float\"}, \"executed_sql\": \"SELECT AVG(Horsepower) FROM cars_data WHERE Year < 1980;\"}' name='execute_sql' id='38e1059c-f755-4d2a-8d22-d0b278d0ffb2' tool_call_id='ZVMGasEtw'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT AVG(Horsepower) FROM cars_data WHERE Year < 1980;",
+    "answer_raw": 111.13291139240506,
+    "answer_normalized": 111.13291139240506,
+    "answer_text": "The average horsepower of the cars before 1980 is 111.13."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": 111.13291139240506
+  }
+}

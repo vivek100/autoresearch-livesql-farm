@@ -1,0 +1,129 @@
+{
+  "trace_id": "trace_spider_14",
+  "question_id": "spider_14",
+  "question": "Show location and name for all stadiums with a capacity between 5000 and 10000.",
+  "db_id": "concert_singer",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'stadiums'}",
+        "inputs": {
+          "table_name": "stadiums"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:89c6137f-148b-3224-905d-d10b9301f4ad",
+          "checkpoint_ns": "tools:89c6137f-148b-3224-905d-d10b9301f4ad"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: stadiums\", \"available_tables\": [\"concert\", \"singer\", \"singer_in_concert\", \"stadium\"]}' name='describe_schema' id='bcdeff8f-1b69-4030-b014-b4c9a4e8f07d' tool_call_id='YWU2QhSrE'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'stadium'}",
+        "inputs": {
+          "table_name": "stadium"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:b3be87b6-3612-b927-3388-e4009ec785e7",
+          "checkpoint_ns": "tools:b3be87b6-3612-b927-3388-e4009ec785e7"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"stadium\", \"columns\": [{\"cid\": 0, \"name\": \"Stadium_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Location\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Capacity\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Highest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Lowest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Average\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='a4db5b22-e0f5-4e44-a52a-8a4def5879b0' tool_call_id='pwDj9ac6n'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000', 'preview_rows': 5}",
+        "inputs": {
+          "sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000",
+          "preview_rows": 5
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:81e91bfa-dc79-39cd-5a48-164602a0d22c",
+          "checkpoint_ns": "tools:81e91bfa-dc79-39cd-5a48-164602a0d22c"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 0, \"columns\": [\"Location\", \"Name\"], \"preview_rows\": [], \"dtypes\": {\"Location\": \"unknown\", \"Name\": \"unknown\"}, \"executed_sql\": \"SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000\"}' name='execute_sql' id='4a205d9b-a81d-408a-a222-42be8f0e6a0a' tool_call_id='Yxe2OC0Ms'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000",
+    "answer_raw": null,
+    "answer_normalized": null,
+    "answer_text": "No stadiums have a capacity between 5000 and 10000."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": null
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "trace_id": "trace_spider_13",
+  "question_id": "spider_13",
+  "question": "What are all the song names by singers who are older than average?",
+  "db_id": "concert_singer",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'include_foreign_keys': True}",
+        "inputs": {
+          "include_foreign_keys": true
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:7f604d15-938b-11c9-70c1-2e6a94c3e6fb",
+          "checkpoint_ns": "tools:7f604d15-938b-11c9-70c1-2e6a94c3e6fb"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 4, \"tables\": [{\"table\": \"concert\", \"columns\": [{\"cid\": 0, \"name\": \"concert_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"concert_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Theme\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Stadium_ID\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"stadium\", \"from_col\": \"Stadium_ID\", \"to_col\": \"Stadium_ID\"}]}, {\"table\": \"singer\", \"columns\": [{\"cid\": 0, \"name\": \"Singer_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Song_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Song_release_year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Age\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Is_male\", \"type\": \"bool\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}, {\"table\": \"singer_in_concert\", \"columns\": [{\"cid\": 0, \"name\": \"concert_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Singer_ID\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": true}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"singer\", \"from_col\": \"Singer_ID\", \"to_col\": \"Singer_ID\"}, {\"id\": 1, \"seq\": 0, \"ref_table\": \"concert\", \"from_col\": \"concert_ID\", \"to_col\": \"concert_ID\"}]}, {\"table\": \"stadium\", \"columns\": [{\"cid\": 0, \"name\": \"Stadium_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Location\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Capacity\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Highest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Lowest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Average\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='b4acefcc-bbf1-4580-9a9f-a643818911de' tool_call_id='xn10BL9M5'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT Song_Name FROM singer WHERE Age > (SELECT AVG(Age) FROM singer);'}",
+        "inputs": {
+          "sql": "SELECT Song_Name FROM singer WHERE Age > (SELECT AVG(Age) FROM singer);"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:2e8d38ac-5a59-5b48-6a04-940ef2a0e712",
+          "checkpoint_ns": "tools:2e8d38ac-5a59-5b48-6a04-940ef2a0e712"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 3, \"columns\": [\"Song_Name\"], \"preview_rows\": [[\"You\"], [\"Sun\"], [\"Gentleman\"]], \"dtypes\": {\"Song_Name\": \"str\"}, \"executed_sql\": \"SELECT Song_Name FROM singer WHERE Age > (SELECT AVG(Age) FROM singer);\"}' name='execute_sql' id='3a5663cb-ed85-4714-982f-168f7284ef46' tool_call_id='TP6l7X4I2'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT Song_Name FROM singer WHERE Age > (SELECT AVG(Age) FROM singer);",
+    "answer_raw": null,
+    "answer_normalized": null,
+    "answer_text": "The song names by singers who are older than average are: You, Sun, Gentleman."
+  },
+  "score": {
+    "correct": false,
+    "gold_value": "You"
+  }
+}

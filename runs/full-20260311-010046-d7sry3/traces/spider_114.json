@@ -1,0 +1,162 @@
+{
+  "trace_id": "trace_spider_114",
+  "question_id": "spider_114",
+  "question": "What is the number of makers of care in France?",
+  "db_id": "car_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'makers'}",
+        "inputs": {
+          "table_name": "makers"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:843bfb25-a8ef-a499-a14e-dfb7606bd04e",
+          "checkpoint_ns": "tools:843bfb25-a8ef-a499-a14e-dfb7606bd04e"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: makers\", \"available_tables\": [\"car_makers\", \"car_names\", \"cars_data\", \"continents\", \"countries\", \"model_list\"]}' name='describe_schema' id='b1749f76-cb40-4df1-bb3f-660540362d7e' tool_call_id='O4hv7ckCv'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'car_makers'}",
+        "inputs": {
+          "table_name": "car_makers"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:e391f184-a0dd-d514-893a-ee2c6636f36a",
+          "checkpoint_ns": "tools:e391f184-a0dd-d514-893a-ee2c6636f36a"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"car_makers\", \"columns\": [{\"cid\": 0, \"name\": \"Id\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Maker\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"FullName\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"countries\", \"from_col\": \"Country\", \"to_col\": \"CountryId\"}]}]}' name='describe_schema' id='b1d610e8-b3f4-4684-93bc-0fba9d6722eb' tool_call_id='xQszpWZmA'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'countries'}",
+        "inputs": {
+          "table_name": "countries"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:a63d0980-15ba-8e6a-a65d-2efb6aa94ddf",
+          "checkpoint_ns": "tools:a63d0980-15ba-8e6a-a65d-2efb6aa94ddf"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"countries\", \"columns\": [{\"cid\": 0, \"name\": \"CountryId\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"CountryName\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Continent\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"continents\", \"from_col\": \"Continent\", \"to_col\": \"ContId\"}]}]}' name='describe_schema' id='1516ac89-e58c-4803-8db2-ff8d1ee40b80' tool_call_id='ERrUgSZzk'"
+      }
+    },
+    {
+      "event_id": 7,
+      "type": "tool_call",
+      "step_index": 3,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': \"SELECT COUNT(*) FROM car_makers WHERE Country = (SELECT CountryId FROM countries WHERE CountryName = 'France')\"}",
+        "inputs": {
+          "sql": "SELECT COUNT(*) FROM car_makers WHERE Country = (SELECT CountryId FROM countries WHERE CountryName = 'France')"
+        },
+        "metadata": {
+          "langgraph_step": 8,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:006c283d-7148-1312-2ba1-ee01328e2a38",
+          "checkpoint_ns": "tools:006c283d-7148-1312-2ba1-ee01328e2a38"
+        }
+      }
+    },
+    {
+      "event_id": 8,
+      "type": "tool_result",
+      "step_index": 3,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"COUNT(*)\"], \"preview_rows\": [[0]], \"dtypes\": {\"COUNT(*)\": \"int\"}, \"executed_sql\": \"SELECT COUNT(*) FROM car_makers WHERE Country = (SELECT CountryId FROM countries WHERE CountryName = \\'France\\')\"}' name='execute_sql' id='df22d258-7c26-44fc-8b18-9a088f9417c8' tool_call_id='vqX02bwRL'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT COUNT(*) FROM car_makers WHERE Country = (SELECT CountryId FROM countries WHERE CountryName = 'France')",
+    "answer_raw": 0,
+    "answer_normalized": 0,
+    "answer_text": "There are no car makers in France."
+  },
+  "score": {
+    "correct": false,
+    "gold_value": 3
+  }
+}

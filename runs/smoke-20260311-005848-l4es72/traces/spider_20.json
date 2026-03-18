@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_spider_20",
+  "question_id": "spider_20",
+  "question": "How many concerts are there in year 2014 or 2015?",
+  "db_id": "concert_singer",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'concerts'}",
+        "inputs": {
+          "table_name": "concerts"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:b77af716-5c88-f8d3-8e89-043a4b84d8e5",
+          "checkpoint_ns": "tools:b77af716-5c88-f8d3-8e89-043a4b84d8e5"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: concerts\", \"available_tables\": [\"concert\", \"singer\", \"singer_in_concert\", \"stadium\"]}' name='describe_schema' id='69ab3db6-bac3-40e8-9b19-e1a7d70db06a' tool_call_id='M39iE571K'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'concert'}",
+        "inputs": {
+          "table_name": "concert"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:b690530c-c053-603b-1e36-5f51eaadea28",
+          "checkpoint_ns": "tools:b690530c-c053-603b-1e36-5f51eaadea28"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"concert\", \"columns\": [{\"cid\": 0, \"name\": \"concert_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"concert_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Theme\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Stadium_ID\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"stadium\", \"from_col\": \"Stadium_ID\", \"to_col\": \"Stadium_ID\"}]}]}' name='describe_schema' id='65214004-0f67-4cf8-9cc2-4ee8853a2f37' tool_call_id='wKc3IjkoQ'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': \"SELECT COUNT(*) FROM concert WHERE Year IN ('2014', '2015')\"}",
+        "inputs": {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Year IN ('2014', '2015')"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:b3b882d6-f22f-c6d7-16bb-6a1707ae7bc9",
+          "checkpoint_ns": "tools:b3b882d6-f22f-c6d7-16bb-6a1707ae7bc9"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"COUNT(*)\"], \"preview_rows\": [[6]], \"dtypes\": {\"COUNT(*)\": \"int\"}, \"executed_sql\": \"SELECT COUNT(*) FROM concert WHERE Year IN (\\'2014\\', \\'2015\\')\"}' name='execute_sql' id='9feca82b-cb10-4340-b866-10da32d35bf7' tool_call_id='FGB5pzgYS'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT COUNT(*) FROM concert WHERE Year IN ('2014', '2015')",
+    "answer_raw": 6,
+    "answer_normalized": 6,
+    "answer_text": "There are 6 concerts in 2014 or 2015."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": 6
+  }
+}

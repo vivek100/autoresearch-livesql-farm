@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_spider_125",
+  "question_id": "spider_125",
+  "question": "What is the number of the cars with horsepower more than 150?",
+  "db_id": "car_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'cars'}",
+        "inputs": {
+          "table_name": "cars"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:bef68ecd-8bc3-aed8-1e9c-5d6e27b494b9",
+          "checkpoint_ns": "tools:bef68ecd-8bc3-aed8-1e9c-5d6e27b494b9"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: cars\", \"available_tables\": [\"car_makers\", \"car_names\", \"cars_data\", \"continents\", \"countries\", \"model_list\"]}' name='describe_schema' id='93daad39-fbdc-4150-a08f-8fe1566526ea' tool_call_id='qu3C6W5OP'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'cars_data'}",
+        "inputs": {
+          "table_name": "cars_data"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:4b76fea1-049c-c9bc-442b-cf4d65358e11",
+          "checkpoint_ns": "tools:4b76fea1-049c-c9bc-442b-cf4d65358e11"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"cars_data\", \"columns\": [{\"cid\": 0, \"name\": \"Id\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"MPG\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Cylinders\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Edispl\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Horsepower\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Weight\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Accelerate\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 7, \"name\": \"Year\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"car_names\", \"from_col\": \"Id\", \"to_col\": \"MakeId\"}]}]}' name='describe_schema' id='4cf0d1ef-779c-4c8f-b22e-9d89099a365f' tool_call_id='z0qjWWzSK'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT COUNT(*) FROM cars_data WHERE Horsepower > 150'}",
+        "inputs": {
+          "sql": "SELECT COUNT(*) FROM cars_data WHERE Horsepower > 150"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:87b40619-4f10-8b03-6f77-2863fc18751a",
+          "checkpoint_ns": "tools:87b40619-4f10-8b03-6f77-2863fc18751a"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"COUNT(*)\"], \"preview_rows\": [[281]], \"dtypes\": {\"COUNT(*)\": \"int\"}, \"executed_sql\": \"SELECT COUNT(*) FROM cars_data WHERE Horsepower > 150\"}' name='execute_sql' id='cfb0cfd9-f26b-4aca-a804-a8d369a7374b' tool_call_id='vegNi6Vqa'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT COUNT(*) FROM cars_data WHERE Horsepower > 150",
+    "answer_raw": 281,
+    "answer_normalized": 281,
+    "answer_text": "There are 281 cars with horsepower more than 150."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": 281
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_spider_2",
+  "question_id": "spider_2",
+  "question": "Show name, country, age for all singers ordered by age from the oldest to the youngest.",
+  "db_id": "concert_singer",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'singers'}",
+        "inputs": {
+          "table_name": "singers"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:604613fd-cb84-fe37-f78a-39a4448a4f1d",
+          "checkpoint_ns": "tools:604613fd-cb84-fe37-f78a-39a4448a4f1d"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: singers\", \"available_tables\": [\"concert\", \"singer\", \"singer_in_concert\", \"stadium\"]}' name='describe_schema' id='84ebc397-a31c-4d18-a0cb-aed429d36437' tool_call_id='8VeEGygm6'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'singer'}",
+        "inputs": {
+          "table_name": "singer"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:d1d0a2e2-2516-f4bf-6b50-0520a5888976",
+          "checkpoint_ns": "tools:d1d0a2e2-2516-f4bf-6b50-0520a5888976"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"singer\", \"columns\": [{\"cid\": 0, \"name\": \"Singer_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Song_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Song_release_year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Age\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Is_male\", \"type\": \"bool\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='7295e364-44b8-4c41-91e9-b4323a83c50f' tool_call_id='fPHMdRH78'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT Name, Country, Age FROM singer ORDER BY Age DESC'}",
+        "inputs": {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:10733b9c-da16-111c-7310-bfd1c3e50649",
+          "checkpoint_ns": "tools:10733b9c-da16-111c-7310-bfd1c3e50649"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 6, \"columns\": [\"Name\", \"Country\", \"Age\"], \"preview_rows\": [[\"Joe Sharp\", \"Netherlands\", 52], [\"John Nizinik\", \"France\", 43], [\"Rose White\", \"France\", 41], [\"Timbaland\", \"United States\", 32], [\"Justin Brown\", \"France\", 29]], \"dtypes\": {\"Name\": \"str\", \"Country\": \"str\", \"Age\": \"int\"}, \"executed_sql\": \"SELECT Name, Country, Age FROM singer ORDER BY Age DESC\"}' name='execute_sql' id='a427412a-ad81-4ade-bc47-eae792042e05' tool_call_id='6VPGQ7Hpv'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC",
+    "answer_raw": null,
+    "answer_normalized": null,
+    "answer_text": "The query returned 6 rows with singer names, countries, and ages, ordered from oldest to youngest."
+  },
+  "score": {
+    "correct": false,
+    "gold_value": "Joe Sharp"
+  }
+}

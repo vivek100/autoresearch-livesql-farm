@@ -1,0 +1,1038 @@
+{
+  "trace_id": "trace_spider_9",
+  "question_id": "spider_9",
+  "question": "What are  the different countries with singers above age 20?",
+  "db_id": "concert_singer",
+  "candidate": {
+    "git_sha": "be6af2a07bcf5a10b975546b7c73d90a7b3694af",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'include_foreign_keys': True}",
+        "inputs": {
+          "include_foreign_keys": true
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:9b806254-03c9-2687-adec-ed3410771b15",
+          "checkpoint_ns": "tools:9b806254-03c9-2687-adec-ed3410771b15"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 4, \"tables\": [{\"table\": \"concert\", \"columns\": [{\"cid\": 0, \"name\": \"concert_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"concert_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Theme\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Stadium_ID\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"stadium\", \"from_col\": \"Stadium_ID\", \"to_col\": \"Stadium_ID\"}]}, {\"table\": \"singer\", \"columns\": [{\"cid\": 0, \"name\": \"Singer_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Song_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Song_release_year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Age\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Is_male\", \"type\": \"bool\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}, {\"table\": \"singer_in_concert\", \"columns\": [{\"cid\": 0, \"name\": \"concert_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Singer_ID\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": true}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"singer\", \"from_col\": \"Singer_ID\", \"to_col\": \"Singer_ID\"}, {\"id\": 1, \"seq\": 0, \"ref_table\": \"concert\", \"from_col\": \"concert_ID\", \"to_col\": \"concert_ID\"}]}, {\"table\": \"stadium\", \"columns\": [{\"cid\": 0, \"name\": \"Stadium_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Location\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Capacity\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Highest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Lowest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Average\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='5ad07b9d-5046-4478-a792-640ffe83c648' tool_call_id='rWWFtG9Ez'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT DISTINCT Country FROM singer WHERE Age > 20;'}",
+        "inputs": {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:6bd891ef-fc6f-9193-3f1f-a81a754170ac",
+          "checkpoint_ns": "tools:6bd891ef-fc6f-9193-3f1f-a81a754170ac"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 3, \"columns\": [\"Country\"], \"preview_rows\": [[\"Netherlands\"], [\"United States\"], [\"France\"]], \"dtypes\": {\"Country\": \"str\"}, \"executed_sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}' name='execute_sql' id='9e12661c-fb0b-41cd-9a6c-e88e1a74176f' tool_call_id='QFllwdKxX'"
+      }
+    }
+  ],
+  "phoenix_spans": [
+    {
+      "name": "Prompt",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "27c6843bdb1449f4",
+        "trace_flags": 1
+      },
+      "parent_span_id": "2eae209ee2f18809",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532245676032,
+      "end_time_ns": 1773815532245676032,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}], \"remaining_steps\": 9999}",
+        "input.mime_type": "application/json",
+        "output.value": "[{\"content\": \"You are a SQLite analytics agent.\\nYou can use exactly two tools:\\n- describe_schema\\n- execute_sql\\n\\nWorkflow:\\n1. Inspect schema before final query.\\n2. Write deterministic SQL. Do not invent tables or columns.\\n3. Execute the final SQL that answers the user question.\\n4. Return JSON only.\\n\\nJSON output keys:\\n- answer_value: scalar value from first row, first column of final SQL (or null)\\n- answer_text: short natural-language answer\\n- sql: final SQL used for the answer\\n\\nRules:\\n- Prefer simple SQL.\\n- Use case-insensitive text matching when appropriate.\\n- If zero rows, set answer_value to null and explain in answer_text.\\n\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"system\", \"name\": null, \"id\": null}, {\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}]",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 1, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:f9e60767-022f-b9c7-032b-b31b79d26205\", \"checkpoint_ns\": \"agent:f9e60767-022f-b9c7-032b-b31b79d26205\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "ChatMistralAI",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "a38ba1b2264b367c",
+        "trace_flags": 1
+      },
+      "parent_span_id": "2eae209ee2f18809",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532247790080,
+      "end_time_ns": 1773815532785801984,
+      "attributes": {
+        "input.value": "{\"messages\": [[{\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"SystemMessage\"], \"kwargs\": {\"content\": \"You are a SQLite analytics agent.\\nYou can use exactly two tools:\\n- describe_schema\\n- execute_sql\\n\\nWorkflow:\\n1. Inspect schema before final query.\\n2. Write deterministic SQL. Do not invent tables or columns.\\n3. Execute the final SQL that answers the user question.\\n4. Return JSON only.\\n\\nJSON output keys:\\n- answer_value: scalar value from first row, first column of final SQL (or null)\\n- answer_text: short natural-language answer\\n- sql: final SQL used for the answer\\n\\nRules:\\n- Prefer simple SQL.\\n- Use case-insensitive text matching when appropriate.\\n- If zero rows, set answer_value to null and explain in answer_text.\\n\", \"type\": \"system\"}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"HumanMessage\"], \"kwargs\": {\"content\": \"What are  the different countries with singers above age 20?\", \"type\": \"human\", \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}}]]}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"generations\": [[{\"text\": \"\", \"generation_info\": {\"finish_reason\": \"tool_calls\"}, \"type\": \"ChatGeneration\", \"message\": {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"AIMessage\"], \"kwargs\": {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}, \"invalid_tool_calls\": []}}}]], \"llm_output\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\"}, \"run\": null, \"type\": \"LLMResult\"}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "system",
+        "llm.input_messages.0.message.content": "You are a SQLite analytics agent.\nYou can use exactly two tools:\n- describe_schema\n- execute_sql\n\nWorkflow:\n1. Inspect schema before final query.\n2. Write deterministic SQL. Do not invent tables or columns.\n3. Execute the final SQL that answers the user question.\n4. Return JSON only.\n\nJSON output keys:\n- answer_value: scalar value from first row, first column of final SQL (or null)\n- answer_text: short natural-language answer\n- sql: final SQL used for the answer\n\nRules:\n- Prefer simple SQL.\n- Use case-insensitive text matching when appropriate.\n- If zero rows, set answer_value to null and explain in answer_text.\n",
+        "llm.input_messages.1.message.role": "user",
+        "llm.input_messages.1.message.content": "What are  the different countries with singers above age 20?",
+        "llm.output_messages.0.message.role": "assistant",
+        "llm.output_messages.0.message.tool_calls.0.tool_call.id": "rWWFtG9Ez",
+        "llm.output_messages.0.message.tool_calls.0.tool_call.function.name": "describe_schema",
+        "llm.output_messages.0.message.tool_calls.0.tool_call.function.arguments": "{\"include_foreign_keys\": true}",
+        "llm.invocation_parameters": "{\"model\": \"mistral-small-latest\", \"temperature\": 0.0, \"top_p\": 1, \"_type\": \"mistralai-chat\", \"stop\": null, \"tools\": [{\"type\": \"function\", \"function\": {\"name\": \"describe_schema\", \"description\": \"Describe schema in JSON format.\", \"parameters\": {\"properties\": {\"table_name\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"default\": null, \"description\": \"Optional table name to describe. If omitted, describes all tables.\"}, \"include_foreign_keys\": {\"default\": true, \"description\": \"Whether to include foreign key relationships.\", \"type\": \"boolean\"}}, \"type\": \"object\"}}}, {\"type\": \"function\", \"function\": {\"name\": \"execute_sql\", \"description\": \"Execute SQL and return JSON result.\", \"parameters\": {\"properties\": {\"sql\": {\"description\": \"SQL query to execute.\", \"type\": \"string\"}, \"preview_rows\": {\"default\": 5, \"description\": \"Number of preview rows to return.\", \"type\": \"integer\"}}, \"required\": [\"sql\"], \"type\": \"object\"}}}]}",
+        "llm.tools.0.tool.json_schema": "{\"type\": \"function\", \"function\": {\"name\": \"describe_schema\", \"description\": \"Describe schema in JSON format.\", \"parameters\": {\"properties\": {\"table_name\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"default\": null, \"description\": \"Optional table name to describe. If omitted, describes all tables.\"}, \"include_foreign_keys\": {\"default\": true, \"description\": \"Whether to include foreign key relationships.\", \"type\": \"boolean\"}}, \"type\": \"object\"}}}",
+        "llm.tools.1.tool.json_schema": "{\"type\": \"function\", \"function\": {\"name\": \"execute_sql\", \"description\": \"Execute SQL and return JSON result.\", \"parameters\": {\"properties\": {\"sql\": {\"description\": \"SQL query to execute.\", \"type\": \"string\"}, \"preview_rows\": {\"default\": 5, \"description\": \"Number of preview rows to return.\", \"type\": \"integer\"}}, \"required\": [\"sql\"], \"type\": \"object\"}}}",
+        "llm.provider": "mistral",
+        "llm.model_name": "mistral-small-latest",
+        "llm.token_count.prompt": 380,
+        "llm.token_count.completion": 13,
+        "llm.token_count.total": 393,
+        "llm.token_count.prompt_details.cache_read": 336,
+        "metadata": "{\"langgraph_step\": 1, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:f9e60767-022f-b9c7-032b-b31b79d26205\", \"checkpoint_ns\": \"agent:f9e60767-022f-b9c7-032b-b31b79d26205\", \"ls_provider\": \"mistral\", \"ls_model_name\": \"mistral-small-latest\", \"ls_model_type\": \"chat\", \"ls_temperature\": 0.0}",
+        "openinference.span.kind": "LLM"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "RunnableSequence",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "2eae209ee2f18809",
+        "trace_flags": 1
+      },
+      "parent_span_id": "040a9739aaeb6da1",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532245676032,
+      "end_time_ns": 1773815532787843072,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}], \"remaining_steps\": 9999}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 1, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:f9e60767-022f-b9c7-032b-b31b79d26205\", \"checkpoint_ns\": \"agent:f9e60767-022f-b9c7-032b-b31b79d26205\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "call_model",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "3f090dfb7ee63974",
+        "trace_flags": 1
+      },
+      "parent_span_id": "040a9739aaeb6da1",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532245676032,
+      "end_time_ns": 1773815532787843072,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}], \"remaining_steps\": 9999}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"messages\": [{\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}]}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 1, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:f9e60767-022f-b9c7-032b-b31b79d26205\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "should_continue",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "161d22881a89aaef",
+        "trace_flags": 1
+      },
+      "parent_span_id": "040a9739aaeb6da1",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532788583168,
+      "end_time_ns": 1773815532788583168,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}], \"remaining_steps\": 9999}",
+        "input.mime_type": "application/json",
+        "output.value": "[\"Send(node='tools', arg={'__type': 'tool_call_with_context', 'tool_call': {'name': 'describe_schema', 'args': {'include_foreign_keys': True}, 'id': 'rWWFtG9Ez', 'type': 'tool_call'}, 'state': {'messages': [HumanMessage(content='What are  the different countries with singers above age 20?', additional_kwargs={}, response_metadata={}, id='39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652'), AIMessage(content='', additional_kwargs={'tool_calls': [{'id': 'rWWFtG9Ez', 'function': {'name': 'describe_schema', 'arguments': '{\\\"include_foreign_keys\\\": true}'}, 'index': 0}]}, response_metadata={'token_usage': {'prompt_tokens': 380, 'total_tokens': 393, 'completion_tokens': 13, 'prompt_tokens_details': {'cached_tokens': 336}}, 'model_name': 'mistral-small-latest', 'model': 'mistral-small-latest', 'finish_reason': 'tool_calls', 'model_provider': 'mistralai'}, id='lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0', tool_calls=[{'name': 'describe_schema', 'args': {'include_foreign_keys': True}, 'id': 'rWWFtG9Ez', 'type': 'tool_call'}], invalid_tool_calls=[], usage_metadata={'input_tokens': 380, 'output_tokens': 13, 'total_tokens': 393})], 'remaining_steps': 9999}})\"]",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 1, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:f9e60767-022f-b9c7-032b-b31b79d26205\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "agent",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "040a9739aaeb6da1",
+        "trace_flags": 1
+      },
+      "parent_span_id": "2bf67e5cdc802fe1",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532245676032,
+      "end_time_ns": 1773815532788583168,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}], \"remaining_steps\": 9999}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"messages\": [{\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}]}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 1, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:f9e60767-022f-b9c7-032b-b31b79d26205\"}",
+        "openinference.span.kind": "AGENT"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "describe_schema",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "956e7fd3ec018e75",
+        "trace_flags": 1
+      },
+      "parent_span_id": "525ba9f37bdfe67c",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532793462016,
+      "end_time_ns": 1773815532795741184,
+      "attributes": {
+        "input.value": "{'include_foreign_keys': True}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": null, \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}",
+        "output.mime_type": "application/json",
+        "tool.name": "describe_schema",
+        "tool.description": "Describe schema in JSON format.",
+        "metadata": "{\"langgraph_step\": 2, \"langgraph_node\": \"tools\", \"langgraph_triggers\": [\"__pregel_push\"], \"langgraph_path\": [\"__pregel_push\", 0, false], \"langgraph_checkpoint_ns\": \"tools:9b806254-03c9-2687-adec-ed3410771b15\", \"checkpoint_ns\": \"tools:9b806254-03c9-2687-adec-ed3410771b15\"}",
+        "openinference.span.kind": "TOOL"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "tools",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "525ba9f37bdfe67c",
+        "trace_flags": 1
+      },
+      "parent_span_id": "2bf67e5cdc802fe1",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532791880960,
+      "end_time_ns": 1773815532795741184,
+      "attributes": {
+        "input.value": "{\"__type\": \"tool_call_with_context\", \"tool_call\": {\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}, \"state\": {\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}], \"remaining_steps\": 9999}}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"messages\": [{\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": null, \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}]}",
+        "output.mime_type": "application/json",
+        "metadata": "{\"langgraph_step\": 2, \"langgraph_node\": \"tools\", \"langgraph_triggers\": [\"__pregel_push\"], \"langgraph_path\": [\"__pregel_push\", 0, false], \"langgraph_checkpoint_ns\": \"tools:9b806254-03c9-2687-adec-ed3410771b15\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "Prompt",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "312ebe7fce40ae78",
+        "trace_flags": 1
+      },
+      "parent_span_id": "009532bb12aeea5e",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532798439936,
+      "end_time_ns": 1773815532798439936,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}], \"remaining_steps\": 9997}",
+        "input.mime_type": "application/json",
+        "output.value": "[{\"content\": \"You are a SQLite analytics agent.\\nYou can use exactly two tools:\\n- describe_schema\\n- execute_sql\\n\\nWorkflow:\\n1. Inspect schema before final query.\\n2. Write deterministic SQL. Do not invent tables or columns.\\n3. Execute the final SQL that answers the user question.\\n4. Return JSON only.\\n\\nJSON output keys:\\n- answer_value: scalar value from first row, first column of final SQL (or null)\\n- answer_text: short natural-language answer\\n- sql: final SQL used for the answer\\n\\nRules:\\n- Prefer simple SQL.\\n- Use case-insensitive text matching when appropriate.\\n- If zero rows, set answer_value to null and explain in answer_text.\\n\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"system\", \"name\": null, \"id\": null}, {\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}]",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 3, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:4297e12e-0fd0-4a30-5e7d-564aec2d1cff\", \"checkpoint_ns\": \"agent:4297e12e-0fd0-4a30-5e7d-564aec2d1cff\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "ChatMistralAI",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "08b70734b9595bf5",
+        "trace_flags": 1
+      },
+      "parent_span_id": "009532bb12aeea5e",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532800710912,
+      "end_time_ns": 1773815533438664960,
+      "attributes": {
+        "input.value": "{\"messages\": [[{\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"SystemMessage\"], \"kwargs\": {\"content\": \"You are a SQLite analytics agent.\\nYou can use exactly two tools:\\n- describe_schema\\n- execute_sql\\n\\nWorkflow:\\n1. Inspect schema before final query.\\n2. Write deterministic SQL. Do not invent tables or columns.\\n3. Execute the final SQL that answers the user question.\\n4. Return JSON only.\\n\\nJSON output keys:\\n- answer_value: scalar value from first row, first column of final SQL (or null)\\n- answer_text: short natural-language answer\\n- sql: final SQL used for the answer\\n\\nRules:\\n- Prefer simple SQL.\\n- Use case-insensitive text matching when appropriate.\\n- If zero rows, set answer_value to null and explain in answer_text.\\n\", \"type\": \"system\"}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"HumanMessage\"], \"kwargs\": {\"content\": \"What are  the different countries with singers above age 20?\", \"type\": \"human\", \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"AIMessage\"], \"kwargs\": {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}, \"invalid_tool_calls\": []}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"ToolMessage\"], \"kwargs\": {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"status\": \"success\"}}]]}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"generations\": [[{\"text\": \"\", \"generation_info\": {\"finish_reason\": \"tool_calls\"}, \"type\": \"ChatGeneration\", \"message\": {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"AIMessage\"], \"kwargs\": {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}, \"invalid_tool_calls\": []}}}]], \"llm_output\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\"}, \"run\": null, \"type\": \"LLMResult\"}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "system",
+        "llm.input_messages.0.message.content": "You are a SQLite analytics agent.\nYou can use exactly two tools:\n- describe_schema\n- execute_sql\n\nWorkflow:\n1. Inspect schema before final query.\n2. Write deterministic SQL. Do not invent tables or columns.\n3. Execute the final SQL that answers the user question.\n4. Return JSON only.\n\nJSON output keys:\n- answer_value: scalar value from first row, first column of final SQL (or null)\n- answer_text: short natural-language answer\n- sql: final SQL used for the answer\n\nRules:\n- Prefer simple SQL.\n- Use case-insensitive text matching when appropriate.\n- If zero rows, set answer_value to null and explain in answer_text.\n",
+        "llm.input_messages.1.message.role": "user",
+        "llm.input_messages.1.message.content": "What are  the different countries with singers above age 20?",
+        "llm.input_messages.2.message.role": "assistant",
+        "llm.input_messages.2.message.tool_calls.0.tool_call.id": "rWWFtG9Ez",
+        "llm.input_messages.2.message.tool_calls.0.tool_call.function.name": "describe_schema",
+        "llm.input_messages.2.message.tool_calls.0.tool_call.function.arguments": "{\"include_foreign_keys\": true}",
+        "llm.input_messages.3.message.role": "tool",
+        "llm.input_messages.3.message.content": "{\"ok\": true, \"table_count\": 4, \"tables\": [{\"table\": \"concert\", \"columns\": [{\"cid\": 0, \"name\": \"concert_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"concert_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Theme\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Stadium_ID\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"stadium\", \"from_col\": \"Stadium_ID\", \"to_col\": \"Stadium_ID\"}]}, {\"table\": \"singer\", \"columns\": [{\"cid\": 0, \"name\": \"Singer_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Song_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Song_release_year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Age\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Is_male\", \"type\": \"bool\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}, {\"table\": \"singer_in_concert\", \"columns\": [{\"cid\": 0, \"name\": \"concert_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Singer_ID\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": true}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"singer\", \"from_col\": \"Singer_ID\", \"to_col\": \"Singer_ID\"}, {\"id\": 1, \"seq\": 0, \"ref_table\": \"concert\", \"from_col\": \"concert_ID\", \"to_col\": \"concert_ID\"}]}, {\"table\": \"stadium\", \"columns\": [{\"cid\": 0, \"name\": \"Stadium_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Location\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Capacity\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Highest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Lowest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Average\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}",
+        "llm.input_messages.3.message.tool_call_id": "rWWFtG9Ez",
+        "llm.input_messages.3.message.name": "describe_schema",
+        "llm.output_messages.0.message.role": "assistant",
+        "llm.output_messages.0.message.tool_calls.0.tool_call.id": "QFllwdKxX",
+        "llm.output_messages.0.message.tool_calls.0.tool_call.function.name": "execute_sql",
+        "llm.output_messages.0.message.tool_calls.0.tool_call.function.arguments": "{\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}",
+        "llm.invocation_parameters": "{\"model\": \"mistral-small-latest\", \"temperature\": 0.0, \"top_p\": 1, \"_type\": \"mistralai-chat\", \"stop\": null, \"tools\": [{\"type\": \"function\", \"function\": {\"name\": \"describe_schema\", \"description\": \"Describe schema in JSON format.\", \"parameters\": {\"properties\": {\"table_name\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"default\": null, \"description\": \"Optional table name to describe. If omitted, describes all tables.\"}, \"include_foreign_keys\": {\"default\": true, \"description\": \"Whether to include foreign key relationships.\", \"type\": \"boolean\"}}, \"type\": \"object\"}}}, {\"type\": \"function\", \"function\": {\"name\": \"execute_sql\", \"description\": \"Execute SQL and return JSON result.\", \"parameters\": {\"properties\": {\"sql\": {\"description\": \"SQL query to execute.\", \"type\": \"string\"}, \"preview_rows\": {\"default\": 5, \"description\": \"Number of preview rows to return.\", \"type\": \"integer\"}}, \"required\": [\"sql\"], \"type\": \"object\"}}}]}",
+        "llm.tools.0.tool.json_schema": "{\"type\": \"function\", \"function\": {\"name\": \"describe_schema\", \"description\": \"Describe schema in JSON format.\", \"parameters\": {\"properties\": {\"table_name\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"default\": null, \"description\": \"Optional table name to describe. If omitted, describes all tables.\"}, \"include_foreign_keys\": {\"default\": true, \"description\": \"Whether to include foreign key relationships.\", \"type\": \"boolean\"}}, \"type\": \"object\"}}}",
+        "llm.tools.1.tool.json_schema": "{\"type\": \"function\", \"function\": {\"name\": \"execute_sql\", \"description\": \"Execute SQL and return JSON result.\", \"parameters\": {\"properties\": {\"sql\": {\"description\": \"SQL query to execute.\", \"type\": \"string\"}, \"preview_rows\": {\"default\": 5, \"description\": \"Number of preview rows to return.\", \"type\": \"integer\"}}, \"required\": [\"sql\"], \"type\": \"object\"}}}",
+        "llm.provider": "mistral",
+        "llm.model_name": "mistral-small-latest",
+        "llm.token_count.prompt": 1338,
+        "llm.token_count.completion": 23,
+        "llm.token_count.total": 1361,
+        "llm.token_count.prompt_details.cache_read": 336,
+        "metadata": "{\"langgraph_step\": 3, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:4297e12e-0fd0-4a30-5e7d-564aec2d1cff\", \"checkpoint_ns\": \"agent:4297e12e-0fd0-4a30-5e7d-564aec2d1cff\", \"ls_provider\": \"mistral\", \"ls_model_name\": \"mistral-small-latest\", \"ls_model_type\": \"chat\", \"ls_temperature\": 0.0}",
+        "openinference.span.kind": "LLM"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "RunnableSequence",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "009532bb12aeea5e",
+        "trace_flags": 1
+      },
+      "parent_span_id": "40610171f7bd1fe1",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532798439936,
+      "end_time_ns": 1773815533440471040,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}], \"remaining_steps\": 9997}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 3, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:4297e12e-0fd0-4a30-5e7d-564aec2d1cff\", \"checkpoint_ns\": \"agent:4297e12e-0fd0-4a30-5e7d-564aec2d1cff\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "call_model",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "55b1185e39f90685",
+        "trace_flags": 1
+      },
+      "parent_span_id": "40610171f7bd1fe1",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532798439936,
+      "end_time_ns": 1773815533440471040,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}], \"remaining_steps\": 9997}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"messages\": [{\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}]}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 3, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:4297e12e-0fd0-4a30-5e7d-564aec2d1cff\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "should_continue",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "596da5a0783ad082",
+        "trace_flags": 1
+      },
+      "parent_span_id": "40610171f7bd1fe1",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815533441765120,
+      "end_time_ns": 1773815533441765120,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}], \"remaining_steps\": 9997}",
+        "input.mime_type": "application/json",
+        "output.value": "[\"Send(node='tools', arg={'__type': 'tool_call_with_context', 'tool_call': {'name': 'execute_sql', 'args': {'sql': 'SELECT DISTINCT Country FROM singer WHERE Age > 20;'}, 'id': 'QFllwdKxX', 'type': 'tool_call'}, 'state': {'messages': [HumanMessage(content='What are  the different countries with singers above age 20?', additional_kwargs={}, response_metadata={}, id='39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652'), AIMessage(content='', additional_kwargs={'tool_calls': [{'id': 'rWWFtG9Ez', 'function': {'name': 'describe_schema', 'arguments': '{\\\"include_foreign_keys\\\": true}'}, 'index': 0}]}, response_metadata={'token_usage': {'prompt_tokens': 380, 'total_tokens': 393, 'completion_tokens': 13, 'prompt_tokens_details': {'cached_tokens': 336}}, 'model_name': 'mistral-small-latest', 'model': 'mistral-small-latest', 'finish_reason': 'tool_calls', 'model_provider': 'mistralai'}, id='lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0', tool_calls=[{'name': 'describe_schema', 'args': {'include_foreign_keys': True}, 'id': 'rWWFtG9Ez', 'type': 'tool_call'}], invalid_tool_calls=[], usage_metadata={'input_tokens': 380, 'output_tokens': 13, 'total_tokens': 393}), ToolMessage(content='{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}', name='describe_schema', id='5ad07b9d-5046-4478-a792-640ffe83c648', tool_call_id='rWWFtG9Ez'), AIMessage(content='', additional_kwargs={'tool_calls': [{'id': 'QFllwdKxX', 'function': {'name': 'execute_sql', 'arguments': '{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}'}, 'index': 0}]}, response_metadata={'token_usage': {'prompt_tokens': 1338, 'total_tokens': 1361, 'completion_tokens': 23, 'prompt_tokens_details': {'cached_tokens': 336}}, 'model_name': 'mistral-small-latest', 'model': 'mistral-small-latest', 'finish_reason': 'tool_calls', 'model_provider': 'mistralai'}, id='lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0', tool_calls=[{'name': 'execute_sql', 'args': {'sql': 'SELECT DISTINCT Country FROM singer WHERE Age > 20;'}, 'id': 'QFllwdKxX', 'type': 'tool_call'}], invalid_tool_calls=[], usage_metadata={'input_tokens': 1338, 'output_tokens': 23, 'total_tokens': 1361})], 'remaining_steps': 9997}})\"]",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 3, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:4297e12e-0fd0-4a30-5e7d-564aec2d1cff\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "agent",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "40610171f7bd1fe1",
+        "trace_flags": 1
+      },
+      "parent_span_id": "2bf67e5cdc802fe1",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532798439936,
+      "end_time_ns": 1773815533443346944,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}], \"remaining_steps\": 9997}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"messages\": [{\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}]}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 3, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:4297e12e-0fd0-4a30-5e7d-564aec2d1cff\"}",
+        "openinference.span.kind": "AGENT"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "execute_sql",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "f02566b022f859cb",
+        "trace_flags": 1
+      },
+      "parent_span_id": "2e13eec337e13d63",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815533445449984,
+      "end_time_ns": 1773815533448893952,
+      "attributes": {
+        "input.value": "{'sql': 'SELECT DISTINCT Country FROM singer WHERE Age > 20;'}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"content\": \"{\\\"ok\\\": true, \\\"row_count\\\": 3, \\\"columns\\\": [\\\"Country\\\"], \\\"preview_rows\\\": [[\\\"Netherlands\\\"], [\\\"United States\\\"], [\\\"France\\\"]], \\\"dtypes\\\": {\\\"Country\\\": \\\"str\\\"}, \\\"executed_sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"execute_sql\", \"id\": null, \"tool_call_id\": \"QFllwdKxX\", \"artifact\": null, \"status\": \"success\"}",
+        "output.mime_type": "application/json",
+        "tool.name": "execute_sql",
+        "tool.description": "Execute SQL and return JSON result.",
+        "metadata": "{\"langgraph_step\": 4, \"langgraph_node\": \"tools\", \"langgraph_triggers\": [\"__pregel_push\"], \"langgraph_path\": [\"__pregel_push\", 0, false], \"langgraph_checkpoint_ns\": \"tools:6bd891ef-fc6f-9193-3f1f-a81a754170ac\", \"checkpoint_ns\": \"tools:6bd891ef-fc6f-9193-3f1f-a81a754170ac\"}",
+        "openinference.span.kind": "TOOL"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "tools",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "2e13eec337e13d63",
+        "trace_flags": 1
+      },
+      "parent_span_id": "2bf67e5cdc802fe1",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815533443346944,
+      "end_time_ns": 1773815533448893952,
+      "attributes": {
+        "input.value": "{\"__type\": \"tool_call_with_context\", \"tool_call\": {\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}, \"state\": {\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}], \"remaining_steps\": 9997}}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"messages\": [{\"content\": \"{\\\"ok\\\": true, \\\"row_count\\\": 3, \\\"columns\\\": [\\\"Country\\\"], \\\"preview_rows\\\": [[\\\"Netherlands\\\"], [\\\"United States\\\"], [\\\"France\\\"]], \\\"dtypes\\\": {\\\"Country\\\": \\\"str\\\"}, \\\"executed_sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"execute_sql\", \"id\": null, \"tool_call_id\": \"QFllwdKxX\", \"artifact\": null, \"status\": \"success\"}]}",
+        "output.mime_type": "application/json",
+        "metadata": "{\"langgraph_step\": 4, \"langgraph_node\": \"tools\", \"langgraph_triggers\": [\"__pregel_push\"], \"langgraph_path\": [\"__pregel_push\", 0, false], \"langgraph_checkpoint_ns\": \"tools:6bd891ef-fc6f-9193-3f1f-a81a754170ac\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "Prompt",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "42613e2eba942ba4",
+        "trace_flags": 1
+      },
+      "parent_span_id": "083b88eaebfb554c",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815533452950016,
+      "end_time_ns": 1773815533452950016,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}, {\"content\": \"{\\\"ok\\\": true, \\\"row_count\\\": 3, \\\"columns\\\": [\\\"Country\\\"], \\\"preview_rows\\\": [[\\\"Netherlands\\\"], [\\\"United States\\\"], [\\\"France\\\"]], \\\"dtypes\\\": {\\\"Country\\\": \\\"str\\\"}, \\\"executed_sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"execute_sql\", \"id\": \"9e12661c-fb0b-41cd-9a6c-e88e1a74176f\", \"tool_call_id\": \"QFllwdKxX\", \"artifact\": null, \"status\": \"success\"}], \"remaining_steps\": 9995}",
+        "input.mime_type": "application/json",
+        "output.value": "[{\"content\": \"You are a SQLite analytics agent.\\nYou can use exactly two tools:\\n- describe_schema\\n- execute_sql\\n\\nWorkflow:\\n1. Inspect schema before final query.\\n2. Write deterministic SQL. Do not invent tables or columns.\\n3. Execute the final SQL that answers the user question.\\n4. Return JSON only.\\n\\nJSON output keys:\\n- answer_value: scalar value from first row, first column of final SQL (or null)\\n- answer_text: short natural-language answer\\n- sql: final SQL used for the answer\\n\\nRules:\\n- Prefer simple SQL.\\n- Use case-insensitive text matching when appropriate.\\n- If zero rows, set answer_value to null and explain in answer_text.\\n\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"system\", \"name\": null, \"id\": null}, {\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}, {\"content\": \"{\\\"ok\\\": true, \\\"row_count\\\": 3, \\\"columns\\\": [\\\"Country\\\"], \\\"preview_rows\\\": [[\\\"Netherlands\\\"], [\\\"United States\\\"], [\\\"France\\\"]], \\\"dtypes\\\": {\\\"Country\\\": \\\"str\\\"}, \\\"executed_sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"execute_sql\", \"id\": \"9e12661c-fb0b-41cd-9a6c-e88e1a74176f\", \"tool_call_id\": \"QFllwdKxX\", \"artifact\": null, \"status\": \"success\"}]",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 5, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:b93a7cdc-6582-821c-2830-72720f21f8d8\", \"checkpoint_ns\": \"agent:b93a7cdc-6582-821c-2830-72720f21f8d8\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "ChatMistralAI",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "93ab8c5a016777dc",
+        "trace_flags": 1
+      },
+      "parent_span_id": "083b88eaebfb554c",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815533454211840,
+      "end_time_ns": 1773815534103902976,
+      "attributes": {
+        "input.value": "{\"messages\": [[{\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"SystemMessage\"], \"kwargs\": {\"content\": \"You are a SQLite analytics agent.\\nYou can use exactly two tools:\\n- describe_schema\\n- execute_sql\\n\\nWorkflow:\\n1. Inspect schema before final query.\\n2. Write deterministic SQL. Do not invent tables or columns.\\n3. Execute the final SQL that answers the user question.\\n4. Return JSON only.\\n\\nJSON output keys:\\n- answer_value: scalar value from first row, first column of final SQL (or null)\\n- answer_text: short natural-language answer\\n- sql: final SQL used for the answer\\n\\nRules:\\n- Prefer simple SQL.\\n- Use case-insensitive text matching when appropriate.\\n- If zero rows, set answer_value to null and explain in answer_text.\\n\", \"type\": \"system\"}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"HumanMessage\"], \"kwargs\": {\"content\": \"What are  the different countries with singers above age 20?\", \"type\": \"human\", \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"AIMessage\"], \"kwargs\": {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}, \"invalid_tool_calls\": []}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"ToolMessage\"], \"kwargs\": {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"status\": \"success\"}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"AIMessage\"], \"kwargs\": {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}, \"invalid_tool_calls\": []}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"ToolMessage\"], \"kwargs\": {\"content\": \"{\\\"ok\\\": true, \\\"row_count\\\": 3, \\\"columns\\\": [\\\"Country\\\"], \\\"preview_rows\\\": [[\\\"Netherlands\\\"], [\\\"United States\\\"], [\\\"France\\\"]], \\\"dtypes\\\": {\\\"Country\\\": \\\"str\\\"}, \\\"executed_sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\", \"type\": \"tool\", \"name\": \"execute_sql\", \"id\": \"9e12661c-fb0b-41cd-9a6c-e88e1a74176f\", \"tool_call_id\": \"QFllwdKxX\", \"status\": \"success\"}}]]}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"generations\": [[{\"text\": \"```json\\n{\\n  \\\"answer_value\\\": \\\"Netherlands\\\",\\n  \\\"answer_text\\\": \\\"The different countries with singers above age 20 are: Netherlands, United States, and France.\\\",\\n  \\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"\\n}\\n```\", \"generation_info\": {\"finish_reason\": \"stop\"}, \"type\": \"ChatGeneration\", \"message\": {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"AIMessage\"], \"kwargs\": {\"content\": \"```json\\n{\\n  \\\"answer_value\\\": \\\"Netherlands\\\",\\n  \\\"answer_text\\\": \\\"The different countries with singers above age 20 are: Netherlands, United States, and France.\\\",\\n  \\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"\\n}\\n```\", \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1428, \"total_tokens\": 1488, \"completion_tokens\": 60, \"prompt_tokens_details\": {\"cached_tokens\": 1312}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"stop\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"id\": \"lc_run--019cffa5-0f8e-7df3-b843-ed4aa9f074f0-0\", \"usage_metadata\": {\"input_tokens\": 1428, \"output_tokens\": 60, \"total_tokens\": 1488}, \"tool_calls\": [], \"invalid_tool_calls\": []}}}]], \"llm_output\": {\"token_usage\": {\"prompt_tokens\": 1428, \"total_tokens\": 1488, \"completion_tokens\": 60, \"prompt_tokens_details\": {\"cached_tokens\": 1312}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\"}, \"run\": null, \"type\": \"LLMResult\"}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "system",
+        "llm.input_messages.0.message.content": "You are a SQLite analytics agent.\nYou can use exactly two tools:\n- describe_schema\n- execute_sql\n\nWorkflow:\n1. Inspect schema before final query.\n2. Write deterministic SQL. Do not invent tables or columns.\n3. Execute the final SQL that answers the user question.\n4. Return JSON only.\n\nJSON output keys:\n- answer_value: scalar value from first row, first column of final SQL (or null)\n- answer_text: short natural-language answer\n- sql: final SQL used for the answer\n\nRules:\n- Prefer simple SQL.\n- Use case-insensitive text matching when appropriate.\n- If zero rows, set answer_value to null and explain in answer_text.\n",
+        "llm.input_messages.1.message.role": "user",
+        "llm.input_messages.1.message.content": "What are  the different countries with singers above age 20?",
+        "llm.input_messages.2.message.role": "assistant",
+        "llm.input_messages.2.message.tool_calls.0.tool_call.id": "rWWFtG9Ez",
+        "llm.input_messages.2.message.tool_calls.0.tool_call.function.name": "describe_schema",
+        "llm.input_messages.2.message.tool_calls.0.tool_call.function.arguments": "{\"include_foreign_keys\": true}",
+        "llm.input_messages.3.message.role": "tool",
+        "llm.input_messages.3.message.content": "{\"ok\": true, \"table_count\": 4, \"tables\": [{\"table\": \"concert\", \"columns\": [{\"cid\": 0, \"name\": \"concert_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"concert_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Theme\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Stadium_ID\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"stadium\", \"from_col\": \"Stadium_ID\", \"to_col\": \"Stadium_ID\"}]}, {\"table\": \"singer\", \"columns\": [{\"cid\": 0, \"name\": \"Singer_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Song_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Song_release_year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Age\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Is_male\", \"type\": \"bool\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}, {\"table\": \"singer_in_concert\", \"columns\": [{\"cid\": 0, \"name\": \"concert_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Singer_ID\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": true}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"singer\", \"from_col\": \"Singer_ID\", \"to_col\": \"Singer_ID\"}, {\"id\": 1, \"seq\": 0, \"ref_table\": \"concert\", \"from_col\": \"concert_ID\", \"to_col\": \"concert_ID\"}]}, {\"table\": \"stadium\", \"columns\": [{\"cid\": 0, \"name\": \"Stadium_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Location\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Capacity\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Highest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Lowest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Average\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}",
+        "llm.input_messages.3.message.tool_call_id": "rWWFtG9Ez",
+        "llm.input_messages.3.message.name": "describe_schema",
+        "llm.input_messages.4.message.role": "assistant",
+        "llm.input_messages.4.message.tool_calls.0.tool_call.id": "QFllwdKxX",
+        "llm.input_messages.4.message.tool_calls.0.tool_call.function.name": "execute_sql",
+        "llm.input_messages.4.message.tool_calls.0.tool_call.function.arguments": "{\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}",
+        "llm.input_messages.5.message.role": "tool",
+        "llm.input_messages.5.message.content": "{\"ok\": true, \"row_count\": 3, \"columns\": [\"Country\"], \"preview_rows\": [[\"Netherlands\"], [\"United States\"], [\"France\"]], \"dtypes\": {\"Country\": \"str\"}, \"executed_sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}",
+        "llm.input_messages.5.message.tool_call_id": "QFllwdKxX",
+        "llm.input_messages.5.message.name": "execute_sql",
+        "llm.output_messages.0.message.role": "assistant",
+        "llm.output_messages.0.message.content": "```json\n{\n  \"answer_value\": \"Netherlands\",\n  \"answer_text\": \"The different countries with singers above age 20 are: Netherlands, United States, and France.\",\n  \"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"\n}\n```",
+        "llm.invocation_parameters": "{\"model\": \"mistral-small-latest\", \"temperature\": 0.0, \"top_p\": 1, \"_type\": \"mistralai-chat\", \"stop\": null, \"tools\": [{\"type\": \"function\", \"function\": {\"name\": \"describe_schema\", \"description\": \"Describe schema in JSON format.\", \"parameters\": {\"properties\": {\"table_name\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"default\": null, \"description\": \"Optional table name to describe. If omitted, describes all tables.\"}, \"include_foreign_keys\": {\"default\": true, \"description\": \"Whether to include foreign key relationships.\", \"type\": \"boolean\"}}, \"type\": \"object\"}}}, {\"type\": \"function\", \"function\": {\"name\": \"execute_sql\", \"description\": \"Execute SQL and return JSON result.\", \"parameters\": {\"properties\": {\"sql\": {\"description\": \"SQL query to execute.\", \"type\": \"string\"}, \"preview_rows\": {\"default\": 5, \"description\": \"Number of preview rows to return.\", \"type\": \"integer\"}}, \"required\": [\"sql\"], \"type\": \"object\"}}}]}",
+        "llm.tools.0.tool.json_schema": "{\"type\": \"function\", \"function\": {\"name\": \"describe_schema\", \"description\": \"Describe schema in JSON format.\", \"parameters\": {\"properties\": {\"table_name\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"default\": null, \"description\": \"Optional table name to describe. If omitted, describes all tables.\"}, \"include_foreign_keys\": {\"default\": true, \"description\": \"Whether to include foreign key relationships.\", \"type\": \"boolean\"}}, \"type\": \"object\"}}}",
+        "llm.tools.1.tool.json_schema": "{\"type\": \"function\", \"function\": {\"name\": \"execute_sql\", \"description\": \"Execute SQL and return JSON result.\", \"parameters\": {\"properties\": {\"sql\": {\"description\": \"SQL query to execute.\", \"type\": \"string\"}, \"preview_rows\": {\"default\": 5, \"description\": \"Number of preview rows to return.\", \"type\": \"integer\"}}, \"required\": [\"sql\"], \"type\": \"object\"}}}",
+        "llm.provider": "mistral",
+        "llm.model_name": "mistral-small-latest",
+        "llm.token_count.prompt": 1428,
+        "llm.token_count.completion": 60,
+        "llm.token_count.total": 1488,
+        "llm.token_count.prompt_details.cache_read": 1312,
+        "metadata": "{\"langgraph_step\": 5, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:b93a7cdc-6582-821c-2830-72720f21f8d8\", \"checkpoint_ns\": \"agent:b93a7cdc-6582-821c-2830-72720f21f8d8\", \"ls_provider\": \"mistral\", \"ls_model_name\": \"mistral-small-latest\", \"ls_model_type\": \"chat\", \"ls_temperature\": 0.0}",
+        "openinference.span.kind": "LLM"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "RunnableSequence",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "083b88eaebfb554c",
+        "trace_flags": 1
+      },
+      "parent_span_id": "171c252679ea4ceb",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815533452950016,
+      "end_time_ns": 1773815534106221056,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}, {\"content\": \"{\\\"ok\\\": true, \\\"row_count\\\": 3, \\\"columns\\\": [\\\"Country\\\"], \\\"preview_rows\\\": [[\\\"Netherlands\\\"], [\\\"United States\\\"], [\\\"France\\\"]], \\\"dtypes\\\": {\\\"Country\\\": \\\"str\\\"}, \\\"executed_sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"execute_sql\", \"id\": \"9e12661c-fb0b-41cd-9a6c-e88e1a74176f\", \"tool_call_id\": \"QFllwdKxX\", \"artifact\": null, \"status\": \"success\"}], \"remaining_steps\": 9995}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"content\": \"```json\\n{\\n  \\\"answer_value\\\": \\\"Netherlands\\\",\\n  \\\"answer_text\\\": \\\"The different countries with singers above age 20 are: Netherlands, United States, and France.\\\",\\n  \\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"\\n}\\n```\", \"additional_kwargs\": {}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1428, \"total_tokens\": 1488, \"completion_tokens\": 60, \"prompt_tokens_details\": {\"cached_tokens\": 1312}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"stop\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0f8e-7df3-b843-ed4aa9f074f0-0\", \"tool_calls\": [], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1428, \"output_tokens\": 60, \"total_tokens\": 1488}}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 5, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:b93a7cdc-6582-821c-2830-72720f21f8d8\", \"checkpoint_ns\": \"agent:b93a7cdc-6582-821c-2830-72720f21f8d8\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "call_model",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "ae7b934f20c5a3cc",
+        "trace_flags": 1
+      },
+      "parent_span_id": "171c252679ea4ceb",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815533452194816,
+      "end_time_ns": 1773815534106221056,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}, {\"content\": \"{\\\"ok\\\": true, \\\"row_count\\\": 3, \\\"columns\\\": [\\\"Country\\\"], \\\"preview_rows\\\": [[\\\"Netherlands\\\"], [\\\"United States\\\"], [\\\"France\\\"]], \\\"dtypes\\\": {\\\"Country\\\": \\\"str\\\"}, \\\"executed_sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"execute_sql\", \"id\": \"9e12661c-fb0b-41cd-9a6c-e88e1a74176f\", \"tool_call_id\": \"QFllwdKxX\", \"artifact\": null, \"status\": \"success\"}], \"remaining_steps\": 9995}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"messages\": [{\"content\": \"```json\\n{\\n  \\\"answer_value\\\": \\\"Netherlands\\\",\\n  \\\"answer_text\\\": \\\"The different countries with singers above age 20 are: Netherlands, United States, and France.\\\",\\n  \\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"\\n}\\n```\", \"additional_kwargs\": {}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1428, \"total_tokens\": 1488, \"completion_tokens\": 60, \"prompt_tokens_details\": {\"cached_tokens\": 1312}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"stop\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0f8e-7df3-b843-ed4aa9f074f0-0\", \"tool_calls\": [], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1428, \"output_tokens\": 60, \"total_tokens\": 1488}}]}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 5, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:b93a7cdc-6582-821c-2830-72720f21f8d8\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "should_continue",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "693a899a7dec4a08",
+        "trace_flags": 1
+      },
+      "parent_span_id": "171c252679ea4ceb",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815534108235008,
+      "end_time_ns": 1773815534109019904,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}, {\"content\": \"{\\\"ok\\\": true, \\\"row_count\\\": 3, \\\"columns\\\": [\\\"Country\\\"], \\\"preview_rows\\\": [[\\\"Netherlands\\\"], [\\\"United States\\\"], [\\\"France\\\"]], \\\"dtypes\\\": {\\\"Country\\\": \\\"str\\\"}, \\\"executed_sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"execute_sql\", \"id\": \"9e12661c-fb0b-41cd-9a6c-e88e1a74176f\", \"tool_call_id\": \"QFllwdKxX\", \"artifact\": null, \"status\": \"success\"}, {\"content\": \"```json\\n{\\n  \\\"answer_value\\\": \\\"Netherlands\\\",\\n  \\\"answer_text\\\": \\\"The different countries with singers above age 20 are: Netherlands, United States, and France.\\\",\\n  \\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"\\n}\\n```\", \"additional_kwargs\": {}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1428, \"total_tokens\": 1488, \"completion_tokens\": 60, \"prompt_tokens_details\": {\"cached_tokens\": 1312}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"stop\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0f8e-7df3-b843-ed4aa9f074f0-0\", \"tool_calls\": [], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1428, \"output_tokens\": 60, \"total_tokens\": 1488}}], \"remaining_steps\": 9995}",
+        "input.mime_type": "application/json",
+        "output.value": "__end__",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 5, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:b93a7cdc-6582-821c-2830-72720f21f8d8\"}",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "agent",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "171c252679ea4ceb",
+        "trace_flags": 1
+      },
+      "parent_span_id": "2bf67e5cdc802fe1",
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815533448893952,
+      "end_time_ns": 1773815534110106112,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}, {\"content\": \"{\\\"ok\\\": true, \\\"row_count\\\": 3, \\\"columns\\\": [\\\"Country\\\"], \\\"preview_rows\\\": [[\\\"Netherlands\\\"], [\\\"United States\\\"], [\\\"France\\\"]], \\\"dtypes\\\": {\\\"Country\\\": \\\"str\\\"}, \\\"executed_sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"execute_sql\", \"id\": \"9e12661c-fb0b-41cd-9a6c-e88e1a74176f\", \"tool_call_id\": \"QFllwdKxX\", \"artifact\": null, \"status\": \"success\"}], \"remaining_steps\": 9995}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"messages\": [{\"content\": \"```json\\n{\\n  \\\"answer_value\\\": \\\"Netherlands\\\",\\n  \\\"answer_text\\\": \\\"The different countries with singers above age 20 are: Netherlands, United States, and France.\\\",\\n  \\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"\\n}\\n```\", \"additional_kwargs\": {}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1428, \"total_tokens\": 1488, \"completion_tokens\": 60, \"prompt_tokens_details\": {\"cached_tokens\": 1312}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"stop\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0f8e-7df3-b843-ed4aa9f074f0-0\", \"tool_calls\": [], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1428, \"output_tokens\": 60, \"total_tokens\": 1488}}]}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "llm.input_messages.0.message.content": "What are  the different countries with singers above age 20?",
+        "metadata": "{\"langgraph_step\": 5, \"langgraph_node\": \"agent\", \"langgraph_triggers\": [\"branch:to:agent\"], \"langgraph_path\": [\"__pregel_pull\", \"agent\"], \"langgraph_checkpoint_ns\": \"agent:b93a7cdc-6582-821c-2830-72720f21f8d8\"}",
+        "openinference.span.kind": "AGENT"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    },
+    {
+      "name": "LangGraph",
+      "context": {
+        "trace_id": "f7b2b11cfff19b79a23fb2496abd3e16",
+        "span_id": "2bf67e5cdc802fe1",
+        "trace_flags": 1
+      },
+      "parent_span_id": null,
+      "kind": "INTERNAL",
+      "start_time_ns": 1773815532243539968,
+      "end_time_ns": 1773815534111217920,
+      "attributes": {
+        "input.value": "{\"messages\": [{\"role\": \"user\", \"content\": \"What are  the different countries with singers above age 20?\"}]}",
+        "input.mime_type": "application/json",
+        "output.value": "{\"messages\": [{\"content\": \"What are  the different countries with singers above age 20?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"39efa1f3-f4ec-427e-a1b9-bfb4fa3d0652\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"rWWFtG9Ez\", \"function\": {\"name\": \"describe_schema\", \"arguments\": \"{\\\"include_foreign_keys\\\": true}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 380, \"total_tokens\": 393, \"completion_tokens\": 13, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0ad7-7161-b8d1-72ca277aaceb-0\", \"tool_calls\": [{\"name\": \"describe_schema\", \"args\": {\"include_foreign_keys\": true}, \"id\": \"rWWFtG9Ez\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 380, \"output_tokens\": 13, \"total_tokens\": 393}}, {\"content\": \"{\\\"ok\\\": true, \\\"table_count\\\": 4, \\\"tables\\\": [{\\\"table\\\": \\\"concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"concert_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Theme\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"stadium\\\", \\\"from_col\\\": \\\"Stadium_ID\\\", \\\"to_col\\\": \\\"Stadium_ID\\\"}]}, {\\\"table\\\": \\\"singer\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Country\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Song_Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Song_release_year\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Age\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Is_male\\\", \\\"type\\\": \\\"bool\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}, {\\\"table\\\": \\\"singer_in_concert\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"concert_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Singer_ID\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}], \\\"foreign_keys\\\": [{\\\"id\\\": 0, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"singer\\\", \\\"from_col\\\": \\\"Singer_ID\\\", \\\"to_col\\\": \\\"Singer_ID\\\"}, {\\\"id\\\": 1, \\\"seq\\\": 0, \\\"ref_table\\\": \\\"concert\\\", \\\"from_col\\\": \\\"concert_ID\\\", \\\"to_col\\\": \\\"concert_ID\\\"}]}, {\\\"table\\\": \\\"stadium\\\", \\\"columns\\\": [{\\\"cid\\\": 0, \\\"name\\\": \\\"Stadium_ID\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": true}, {\\\"cid\\\": 1, \\\"name\\\": \\\"Location\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 2, \\\"name\\\": \\\"Name\\\", \\\"type\\\": \\\"TEXT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 3, \\\"name\\\": \\\"Capacity\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 4, \\\"name\\\": \\\"Highest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 5, \\\"name\\\": \\\"Lowest\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}, {\\\"cid\\\": 6, \\\"name\\\": \\\"Average\\\", \\\"type\\\": \\\"INT\\\", \\\"notnull\\\": false, \\\"default\\\": null, \\\"pk\\\": false}], \\\"foreign_keys\\\": []}]}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"describe_schema\", \"id\": \"5ad07b9d-5046-4478-a792-640ffe83c648\", \"tool_call_id\": \"rWWFtG9Ez\", \"artifact\": null, \"status\": \"success\"}, {\"content\": \"\", \"additional_kwargs\": {\"tool_calls\": [{\"id\": \"QFllwdKxX\", \"function\": {\"name\": \"execute_sql\", \"arguments\": \"{\\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\"}, \"index\": 0}]}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1338, \"total_tokens\": 1361, \"completion_tokens\": 23, \"prompt_tokens_details\": {\"cached_tokens\": 336}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"tool_calls\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0d01-78e3-a9b1-cfbc3c1ba82f-0\", \"tool_calls\": [{\"name\": \"execute_sql\", \"args\": {\"sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}, \"id\": \"QFllwdKxX\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1338, \"output_tokens\": 23, \"total_tokens\": 1361}}, {\"content\": \"{\\\"ok\\\": true, \\\"row_count\\\": 3, \\\"columns\\\": [\\\"Country\\\"], \\\"preview_rows\\\": [[\\\"Netherlands\\\"], [\\\"United States\\\"], [\\\"France\\\"]], \\\"dtypes\\\": {\\\"Country\\\": \\\"str\\\"}, \\\"executed_sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"}\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"execute_sql\", \"id\": \"9e12661c-fb0b-41cd-9a6c-e88e1a74176f\", \"tool_call_id\": \"QFllwdKxX\", \"artifact\": null, \"status\": \"success\"}, {\"content\": \"```json\\n{\\n  \\\"answer_value\\\": \\\"Netherlands\\\",\\n  \\\"answer_text\\\": \\\"The different countries with singers above age 20 are: Netherlands, United States, and France.\\\",\\n  \\\"sql\\\": \\\"SELECT DISTINCT Country FROM singer WHERE Age > 20;\\\"\\n}\\n```\", \"additional_kwargs\": {}, \"response_metadata\": {\"token_usage\": {\"prompt_tokens\": 1428, \"total_tokens\": 1488, \"completion_tokens\": 60, \"prompt_tokens_details\": {\"cached_tokens\": 1312}}, \"model_name\": \"mistral-small-latest\", \"model\": \"mistral-small-latest\", \"finish_reason\": \"stop\", \"model_provider\": \"mistralai\"}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--019cffa5-0f8e-7df3-b843-ed4aa9f074f0-0\", \"tool_calls\": [], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1428, \"output_tokens\": 60, \"total_tokens\": 1488}}]}",
+        "output.mime_type": "application/json",
+        "llm.input_messages.0.message.role": "user",
+        "openinference.span.kind": "CHAIN"
+      },
+      "events": [],
+      "links": [],
+      "status": {
+        "status_code": "OK",
+        "description": null
+      },
+      "instrumentation_scope": {
+        "name": "openinference.instrumentation.langchain",
+        "version": "0.1.61"
+      },
+      "resource": {
+        "telemetry.sdk.language": "python",
+        "telemetry.sdk.name": "opentelemetry",
+        "telemetry.sdk.version": "1.39.1",
+        "service.name": "analytics-agent-autoresearch"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;",
+    "answer_raw": "Netherlands",
+    "answer_normalized": "Netherlands",
+    "answer_text": "The different countries with singers above age 20 are: Netherlands, United States, and France."
+  },
+  "observability": {
+    "initialized": true,
+    "backend": "phoenix",
+    "enabled": true,
+    "collector_endpoint": "http://127.0.0.1:6006/v1/traces",
+    "service_name": "analytics-agent-autoresearch",
+    "remote_export_enabled": true
+  },
+  "score": {
+    "correct": true,
+    "gold_value": "Netherlands"
+  }
+}

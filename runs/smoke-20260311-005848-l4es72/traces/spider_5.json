@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_spider_5",
+  "question_id": "spider_5",
+  "question": "What is the average, minimum, and maximum age for all French singers?",
+  "db_id": "concert_singer",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'singers'}",
+        "inputs": {
+          "table_name": "singers"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:ef1729e0-76a8-81bd-c107-6b96bdbd8b7e",
+          "checkpoint_ns": "tools:ef1729e0-76a8-81bd-c107-6b96bdbd8b7e"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: singers\", \"available_tables\": [\"concert\", \"singer\", \"singer_in_concert\", \"stadium\"]}' name='describe_schema' id='08712215-7f14-44ca-a077-cefda0d2f6b6' tool_call_id='1lkii6PQ7'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'singer'}",
+        "inputs": {
+          "table_name": "singer"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:31ce1cd0-e060-00d8-a252-52123c29dcab",
+          "checkpoint_ns": "tools:31ce1cd0-e060-00d8-a252-52123c29dcab"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"singer\", \"columns\": [{\"cid\": 0, \"name\": \"Singer_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Song_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Song_release_year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Age\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Is_male\", \"type\": \"bool\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='42bfed43-106b-4191-9bd3-85abcc15456a' tool_call_id='0XDyMmGRo'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': \"SELECT AVG(Age) AS average_age, MIN(Age) AS minimum_age, MAX(Age) AS maximum_age FROM singer WHERE LOWER(Country) = 'france';\"}",
+        "inputs": {
+          "sql": "SELECT AVG(Age) AS average_age, MIN(Age) AS minimum_age, MAX(Age) AS maximum_age FROM singer WHERE LOWER(Country) = 'france';"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:de834f47-802b-63d0-abe6-64381c9bf63c",
+          "checkpoint_ns": "tools:de834f47-802b-63d0-abe6-64381c9bf63c"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"average_age\", \"minimum_age\", \"maximum_age\"], \"preview_rows\": [[34.5, 25, 43]], \"dtypes\": {\"average_age\": \"float\", \"minimum_age\": \"int\", \"maximum_age\": \"int\"}, \"executed_sql\": \"SELECT AVG(Age) AS average_age, MIN(Age) AS minimum_age, MAX(Age) AS maximum_age FROM singer WHERE LOWER(Country) = \\'france\\';\"}' name='execute_sql' id='97778e02-ad39-4aff-a91d-739554707888' tool_call_id='nNxirhd2P'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT AVG(Age) AS average_age, MIN(Age) AS minimum_age, MAX(Age) AS maximum_age FROM singer WHERE LOWER(Country) = 'france';",
+    "answer_raw": 34.5,
+    "answer_normalized": 34.5,
+    "answer_text": "The average age of French singers is 34.5, with the minimum age being 25 and the maximum age being 43."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": 34.5
+  }
+}

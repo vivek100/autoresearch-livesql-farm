@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_spider_146",
+  "question_id": "spider_146",
+  "question": "In 1980, how many cars were made?",
+  "db_id": "car_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'cars'}",
+        "inputs": {
+          "table_name": "cars"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:5c58c214-8281-d4d4-027f-79cc1fffb92c",
+          "checkpoint_ns": "tools:5c58c214-8281-d4d4-027f-79cc1fffb92c"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: cars\", \"available_tables\": [\"car_makers\", \"car_names\", \"cars_data\", \"continents\", \"countries\", \"model_list\"]}' name='describe_schema' id='c006f952-7e76-4802-932f-327c9c2addb9' tool_call_id='6dfW9Q3OU'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'cars_data'}",
+        "inputs": {
+          "table_name": "cars_data"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:6ff80e23-c811-f8de-859d-c37eecde0468",
+          "checkpoint_ns": "tools:6ff80e23-c811-f8de-859d-c37eecde0468"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"cars_data\", \"columns\": [{\"cid\": 0, \"name\": \"Id\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"MPG\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Cylinders\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Edispl\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Horsepower\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Weight\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Accelerate\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 7, \"name\": \"Year\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"car_names\", \"from_col\": \"Id\", \"to_col\": \"MakeId\"}]}]}' name='describe_schema' id='3265a50f-ae4f-429c-a53e-d31c865aa87f' tool_call_id='V6uOh8wmp'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT COUNT(*) FROM cars_data WHERE Year = 1980'}",
+        "inputs": {
+          "sql": "SELECT COUNT(*) FROM cars_data WHERE Year = 1980"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:66d9269b-8d91-f4ae-5005-f1ff0e185052",
+          "checkpoint_ns": "tools:66d9269b-8d91-f4ae-5005-f1ff0e185052"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"COUNT(*)\"], \"preview_rows\": [[29]], \"dtypes\": {\"COUNT(*)\": \"int\"}, \"executed_sql\": \"SELECT COUNT(*) FROM cars_data WHERE Year = 1980\"}' name='execute_sql' id='fcee568a-f217-4dae-adb1-c44c631123d7' tool_call_id='F6K6cIGGp'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT COUNT(*) FROM cars_data WHERE Year = 1980",
+    "answer_raw": 29,
+    "answer_normalized": 29,
+    "answer_text": "In 1980, 29 cars were made."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": 29
+  }
+}

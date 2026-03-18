@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_spider_8",
+  "question_id": "spider_8",
+  "question": "What are all distinct countries where singers above age 20 are from?",
+  "db_id": "concert_singer",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'singers'}",
+        "inputs": {
+          "table_name": "singers"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:b7096593-62fd-ccf3-5da6-9e8db5bc3017",
+          "checkpoint_ns": "tools:b7096593-62fd-ccf3-5da6-9e8db5bc3017"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: singers\", \"available_tables\": [\"concert\", \"singer\", \"singer_in_concert\", \"stadium\"]}' name='describe_schema' id='126e7eee-17a4-4ab3-8366-0d086a7cd81f' tool_call_id='9FEaDbTsm'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'singer'}",
+        "inputs": {
+          "table_name": "singer"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:c9fb584f-fb0c-e731-5e97-a823285bba71",
+          "checkpoint_ns": "tools:c9fb584f-fb0c-e731-5e97-a823285bba71"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"singer\", \"columns\": [{\"cid\": 0, \"name\": \"Singer_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Song_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Song_release_year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Age\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Is_male\", \"type\": \"bool\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='5836da07-d71c-4874-861a-a4ffb7806585' tool_call_id='ZJ6HBGx5G'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT DISTINCT Country FROM singer WHERE Age > 20;'}",
+        "inputs": {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:8f26ca81-63a4-c177-ae83-2a02dc8a880f",
+          "checkpoint_ns": "tools:8f26ca81-63a4-c177-ae83-2a02dc8a880f"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 3, \"columns\": [\"Country\"], \"preview_rows\": [[\"Netherlands\"], [\"United States\"], [\"France\"]], \"dtypes\": {\"Country\": \"str\"}, \"executed_sql\": \"SELECT DISTINCT Country FROM singer WHERE Age > 20;\"}' name='execute_sql' id='b0a0de9e-f101-4ddf-b77b-4148d305f592' tool_call_id='C6AXOE1wW'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;",
+    "answer_raw": null,
+    "answer_normalized": null,
+    "answer_text": "Singers above age 20 are from Netherlands, United States, and France."
+  },
+  "score": {
+    "correct": false,
+    "gold_value": "Netherlands"
+  }
+}

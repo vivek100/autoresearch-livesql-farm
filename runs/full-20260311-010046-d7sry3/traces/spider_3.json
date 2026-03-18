@@ -1,0 +1,94 @@
+{
+  "trace_id": "trace_spider_3",
+  "question_id": "spider_3",
+  "question": "What are the names, countries, and ages for every singer in descending order of age?",
+  "db_id": "concert_singer",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'singer'}",
+        "inputs": {
+          "table_name": "singer"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:f727bd67-d674-d1a9-1d79-eb0ec02b9c39",
+          "checkpoint_ns": "tools:f727bd67-d674-d1a9-1d79-eb0ec02b9c39"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"singer\", \"columns\": [{\"cid\": 0, \"name\": \"Singer_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Song_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Song_release_year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Age\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Is_male\", \"type\": \"bool\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='27c8c1b7-e2db-40ab-98a9-1d59520b780c' tool_call_id='W3D7OzFkb'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT Name, Country, Age FROM singer ORDER BY Age DESC'}",
+        "inputs": {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:f261568c-088d-547a-dbec-1f1d357ce321",
+          "checkpoint_ns": "tools:f261568c-088d-547a-dbec-1f1d357ce321"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 6, \"columns\": [\"Name\", \"Country\", \"Age\"], \"preview_rows\": [[\"Joe Sharp\", \"Netherlands\", 52], [\"John Nizinik\", \"France\", 43], [\"Rose White\", \"France\", 41], [\"Timbaland\", \"United States\", 32], [\"Justin Brown\", \"France\", 29]], \"dtypes\": {\"Name\": \"str\", \"Country\": \"str\", \"Age\": \"int\"}, \"executed_sql\": \"SELECT Name, Country, Age FROM singer ORDER BY Age DESC\"}' name='execute_sql' id='6b908076-b0e9-4a05-a9a8-65d3696cc7aa' tool_call_id='gBn2pSyrz'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC",
+    "answer_raw": null,
+    "answer_normalized": null,
+    "answer_text": "The names, countries, and ages for every singer in descending order of age are: Joe Sharp (Netherlands, 52), John Nizinik (France, 43), Rose White (France, 41), Timbaland (United States, 32), and Justin Brown (France, 29)."
+  },
+  "score": {
+    "correct": false,
+    "gold_value": "Joe Sharp"
+  }
+}

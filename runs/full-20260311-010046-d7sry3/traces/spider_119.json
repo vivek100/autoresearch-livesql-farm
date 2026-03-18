@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_spider_119",
+  "question_id": "spider_119",
+  "question": "What is the smallest weight of the car produced with 8 cylinders on 1974 ?",
+  "db_id": "car_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'cars'}",
+        "inputs": {
+          "table_name": "cars"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:8f8747bd-1697-b09d-eefc-77d4575233be",
+          "checkpoint_ns": "tools:8f8747bd-1697-b09d-eefc-77d4575233be"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: cars\", \"available_tables\": [\"car_makers\", \"car_names\", \"cars_data\", \"continents\", \"countries\", \"model_list\"]}' name='describe_schema' id='44d8e64d-cebd-407b-912e-a1dee90776d6' tool_call_id='RUHYmoTS7'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'cars_data'}",
+        "inputs": {
+          "table_name": "cars_data"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:6f76adcb-4675-3388-ba11-55a85e2749ba",
+          "checkpoint_ns": "tools:6f76adcb-4675-3388-ba11-55a85e2749ba"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"cars_data\", \"columns\": [{\"cid\": 0, \"name\": \"Id\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"MPG\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Cylinders\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Edispl\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Horsepower\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Weight\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Accelerate\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 7, \"name\": \"Year\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"car_names\", \"from_col\": \"Id\", \"to_col\": \"MakeId\"}]}]}' name='describe_schema' id='6e17b35f-407d-40e2-9dad-73ca39dcddd7' tool_call_id='oFfFTUMDA'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974'}",
+        "inputs": {
+          "sql": "SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:90b160df-e5e3-8b86-7f9d-a52cc23efefe",
+          "checkpoint_ns": "tools:90b160df-e5e3-8b86-7f9d-a52cc23efefe"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"MIN(Weight)\"], \"preview_rows\": [[4141]], \"dtypes\": {\"MIN(Weight)\": \"int\"}, \"executed_sql\": \"SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974\"}' name='execute_sql' id='17bdf1c2-4843-4be6-9c3f-306a91ce45bc' tool_call_id='vGmkMRCqj'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974",
+    "answer_raw": 4141,
+    "answer_normalized": 4141,
+    "answer_text": "The smallest weight of the car produced with 8 cylinders on 1974 is 4141."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": 4141
+  }
+}

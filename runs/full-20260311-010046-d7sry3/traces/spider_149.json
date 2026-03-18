@@ -1,0 +1,162 @@
+{
+  "trace_id": "trace_spider_149",
+  "question_id": "spider_149",
+  "question": "Which makers designed more than 3 car models? List full name and the id.",
+  "db_id": "car_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'makers'}",
+        "inputs": {
+          "table_name": "makers"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:a48a1a78-8cac-ddec-bc91-cc6165b18321",
+          "checkpoint_ns": "tools:a48a1a78-8cac-ddec-bc91-cc6165b18321"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: makers\", \"available_tables\": [\"car_makers\", \"car_names\", \"cars_data\", \"continents\", \"countries\", \"model_list\"]}' name='describe_schema' id='a361df22-3847-487d-b92a-bba40a8207bd' tool_call_id='aGT37914J'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'car_makers'}",
+        "inputs": {
+          "table_name": "car_makers"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:3c887214-f1f6-bf60-edfd-6c273a8f4188",
+          "checkpoint_ns": "tools:3c887214-f1f6-bf60-edfd-6c273a8f4188"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"car_makers\", \"columns\": [{\"cid\": 0, \"name\": \"Id\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Maker\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"FullName\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"countries\", \"from_col\": \"Country\", \"to_col\": \"CountryId\"}]}]}' name='describe_schema' id='529b0ab2-2810-48dc-8b23-f117b0314cdf' tool_call_id='DKZMOeoS8'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'car_names'}",
+        "inputs": {
+          "table_name": "car_names"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:24acc58b-36a1-8be7-57c1-989a2c1ce4b9",
+          "checkpoint_ns": "tools:24acc58b-36a1-8be7-57c1-989a2c1ce4b9"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"car_names\", \"columns\": [{\"cid\": 0, \"name\": \"MakeId\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Model\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Make\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"model_list\", \"from_col\": \"Model\", \"to_col\": \"Model\"}]}]}' name='describe_schema' id='d3b71686-59c8-4564-9717-a60243f90e86' tool_call_id='OCwDTP2jQ'"
+      }
+    },
+    {
+      "event_id": 7,
+      "type": "tool_call",
+      "step_index": 3,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT cm.Id, cm.FullName, COUNT(cn.Model) AS ModelCount FROM car_makers cm JOIN car_names cn ON cm.Id = cn.MakeId GROUP BY cm.Id, cm.FullName HAVING COUNT(cn.Model) > 3 ORDER BY ModelCount DESC;'}",
+        "inputs": {
+          "sql": "SELECT cm.Id, cm.FullName, COUNT(cn.Model) AS ModelCount FROM car_makers cm JOIN car_names cn ON cm.Id = cn.MakeId GROUP BY cm.Id, cm.FullName HAVING COUNT(cn.Model) > 3 ORDER BY ModelCount DESC;"
+        },
+        "metadata": {
+          "langgraph_step": 8,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:e684a148-ed40-c4dd-1820-0649116067a3",
+          "checkpoint_ns": "tools:e684a148-ed40-c4dd-1820-0649116067a3"
+        }
+      }
+    },
+    {
+      "event_id": 8,
+      "type": "tool_result",
+      "step_index": 3,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 0, \"columns\": [\"Id\", \"FullName\", \"ModelCount\"], \"preview_rows\": [], \"dtypes\": {\"Id\": \"unknown\", \"FullName\": \"unknown\", \"ModelCount\": \"unknown\"}, \"executed_sql\": \"SELECT cm.Id, cm.FullName, COUNT(cn.Model) AS ModelCount FROM car_makers cm JOIN car_names cn ON cm.Id = cn.MakeId GROUP BY cm.Id, cm.FullName HAVING COUNT(cn.Model) > 3 ORDER BY ModelCount DESC;\"}' name='execute_sql' id='6216889f-1c37-45fe-a767-871dab9204dd' tool_call_id='UuWBrhpz1'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT cm.Id, cm.FullName, COUNT(cn.Model) AS ModelCount FROM car_makers cm JOIN car_names cn ON cm.Id = cn.MakeId GROUP BY cm.Id, cm.FullName HAVING COUNT(cn.Model) > 3 ORDER BY ModelCount DESC;",
+    "answer_raw": null,
+    "answer_normalized": null,
+    "answer_text": "No makers designed more than 3 car models."
+  },
+  "score": {
+    "correct": false,
+    "gold_value": "General Motors"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "trace_id": "trace_spider_50",
+  "question_id": "spider_50",
+  "question": "List the maximum weight and type for each type of pet.",
+  "db_id": "pets_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'include_foreign_keys': True}",
+        "inputs": {
+          "include_foreign_keys": true
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:2d1ec9fa-b140-fbb2-2dc3-20fe3f0aae1b",
+          "checkpoint_ns": "tools:2d1ec9fa-b140-fbb2-2dc3-20fe3f0aae1b"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 3, \"tables\": [{\"table\": \"Has_Pet\", \"columns\": [{\"cid\": 0, \"name\": \"StuID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 1, \"name\": \"PetID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"Student\", \"from_col\": \"StuID\", \"to_col\": \"StuID\"}, {\"id\": 1, \"seq\": 0, \"ref_table\": \"Pets\", \"from_col\": \"PetID\", \"to_col\": \"PetID\"}]}, {\"table\": \"Pets\", \"columns\": [{\"cid\": 0, \"name\": \"PetID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"PetType\", \"type\": \"VARCHAR(20)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"pet_age\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"weight\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}, {\"table\": \"Student\", \"columns\": [{\"cid\": 0, \"name\": \"StuID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"LName\", \"type\": \"VARCHAR(12)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Fname\", \"type\": \"VARCHAR(12)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Age\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Sex\", \"type\": \"VARCHAR(1)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Major\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Advisor\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 7, \"name\": \"city_code\", \"type\": \"VARCHAR(3)\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='230667fb-6ed6-4618-8911-c2649063cd9e' tool_call_id='hWbW0kHzz'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT PetType, MAX(weight) FROM Pets GROUP BY PetType'}",
+        "inputs": {
+          "sql": "SELECT PetType, MAX(weight) FROM Pets GROUP BY PetType"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:50710bef-7be1-d873-f658-5011343eb576",
+          "checkpoint_ns": "tools:50710bef-7be1-d873-f658-5011343eb576"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 2, \"columns\": [\"PetType\", \"MAX(weight)\"], \"preview_rows\": [[\"cat\", 12.0], [\"dog\", 13.4]], \"dtypes\": {\"PetType\": \"str\", \"MAX(weight)\": \"float\"}, \"executed_sql\": \"SELECT PetType, MAX(weight) FROM Pets GROUP BY PetType\"}' name='execute_sql' id='e87e46f3-3e40-48a0-b8b9-f34e2d384f8d' tool_call_id='Y8HSModyG'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT PetType, MAX(weight) FROM Pets GROUP BY PetType",
+    "answer_raw": null,
+    "answer_normalized": null,
+    "answer_text": "The maximum weight for each type of pet is: cat (12.0), dog (13.4)."
+  },
+  "score": {
+    "correct": false,
+    "gold_value": 12.0
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "trace_id": "trace_spider_67",
+  "question_id": "spider_67",
+  "question": "Find the type and weight of the youngest pet.",
+  "db_id": "pets_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'pets'}",
+        "inputs": {
+          "table_name": "pets"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:d0bf14eb-143a-7ff7-2515-8f0b5f8b4fac",
+          "checkpoint_ns": "tools:d0bf14eb-143a-7ff7-2515-8f0b5f8b4fac"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"Pets\", \"columns\": [{\"cid\": 0, \"name\": \"PetID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"PetType\", \"type\": \"VARCHAR(20)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"pet_age\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"weight\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='9160b99c-7418-47b7-8cac-9fadad160a08' tool_call_id='P44Vjg7ZG'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;'}",
+        "inputs": {
+          "sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:8a4600e1-96b3-49c0-4ec8-6eb1c0e47d47",
+          "checkpoint_ns": "tools:8a4600e1-96b3-49c0-4ec8-6eb1c0e47d47"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"PetType\", \"weight\"], \"preview_rows\": [[\"dog\", 9.3]], \"dtypes\": {\"PetType\": \"str\", \"weight\": \"float\"}, \"executed_sql\": \"SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;\"}' name='execute_sql' id='dbc4c312-cbcb-4118-a207-3d60957a2e31' tool_call_id='qFKCNRYmk'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;",
+    "answer_raw": "dog",
+    "answer_normalized": "dog",
+    "answer_text": "The youngest pet is a dog weighing 9.3 units."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": "dog"
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_spider_16",
+  "question_id": "spider_16",
+  "question": "What is the maximum capacity and the average of all stadiums ?",
+  "db_id": "concert_singer",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'stadiums'}",
+        "inputs": {
+          "table_name": "stadiums"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:724c2596-aaed-be7c-da3d-2565286e6ec8",
+          "checkpoint_ns": "tools:724c2596-aaed-be7c-da3d-2565286e6ec8"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: stadiums\", \"available_tables\": [\"concert\", \"singer\", \"singer_in_concert\", \"stadium\"]}' name='describe_schema' id='41dd35fa-702c-4b86-a245-5918921d9984' tool_call_id='idS7JyBPE'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'stadium'}",
+        "inputs": {
+          "table_name": "stadium"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:b1e5e259-63a4-bafb-a207-77160d4da9cc",
+          "checkpoint_ns": "tools:b1e5e259-63a4-bafb-a207-77160d4da9cc"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"stadium\", \"columns\": [{\"cid\": 0, \"name\": \"Stadium_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Location\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Capacity\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Highest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Lowest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Average\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='18c95c6b-e223-4d14-99da-d2a53d3bdd34' tool_call_id='abnGiQblA'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT MAX(\"Capacity\"), AVG(\"Capacity\") FROM stadium'}",
+        "inputs": {
+          "sql": "SELECT MAX(\"Capacity\"), AVG(\"Capacity\") FROM stadium"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:8b19aea9-e6ac-76b7-dacf-62fefd0c6077",
+          "checkpoint_ns": "tools:8b19aea9-e6ac-76b7-dacf-62fefd0c6077"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"MAX(\\\\\"Capacity\\\\\")\", \"AVG(\\\\\"Capacity\\\\\")\"], \"preview_rows\": [[52500, 10621.666666666666]], \"dtypes\": {\"MAX(\\\\\"Capacity\\\\\")\": \"int\", \"AVG(\\\\\"Capacity\\\\\")\": \"float\"}, \"executed_sql\": \"SELECT MAX(\\\\\"Capacity\\\\\"), AVG(\\\\\"Capacity\\\\\") FROM stadium\"}' name='execute_sql' id='b4e00321-d634-47ea-92c6-c35d4b5d61c0' tool_call_id='wklU00swH'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT MAX(\"Capacity\"), AVG(\"Capacity\") FROM stadium",
+    "answer_raw": 52500,
+    "answer_normalized": 52500,
+    "answer_text": "The maximum capacity of all stadiums is 52,500, and the average capacity is approximately 10,622."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": 52500
+  }
+}

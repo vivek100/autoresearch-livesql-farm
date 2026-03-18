@@ -1,0 +1,92 @@
+{
+  "trace_id": "trace_spider_7",
+  "question_id": "spider_7",
+  "question": "What are the names and release years for all the songs of the youngest singer?",
+  "db_id": "concert_singer",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{}",
+        "inputs": {},
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:f08209da-ab0b-3afc-a362-3ac99362620e",
+          "checkpoint_ns": "tools:f08209da-ab0b-3afc-a362-3ac99362620e"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 4, \"tables\": [{\"table\": \"concert\", \"columns\": [{\"cid\": 0, \"name\": \"concert_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"concert_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Theme\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Stadium_ID\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"stadium\", \"from_col\": \"Stadium_ID\", \"to_col\": \"Stadium_ID\"}]}, {\"table\": \"singer\", \"columns\": [{\"cid\": 0, \"name\": \"Singer_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Song_Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Song_release_year\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Age\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Is_male\", \"type\": \"bool\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}, {\"table\": \"singer_in_concert\", \"columns\": [{\"cid\": 0, \"name\": \"concert_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Singer_ID\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": true}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"singer\", \"from_col\": \"Singer_ID\", \"to_col\": \"Singer_ID\"}, {\"id\": 1, \"seq\": 0, \"ref_table\": \"concert\", \"from_col\": \"concert_ID\", \"to_col\": \"concert_ID\"}]}, {\"table\": \"stadium\", \"columns\": [{\"cid\": 0, \"name\": \"Stadium_ID\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Location\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Name\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Capacity\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Highest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Lowest\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Average\", \"type\": \"INT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='f637b8c9-b1b4-492b-9862-eb9692e910dd' tool_call_id='G27w19SlN'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT Name, Song_Name, Song_release_year FROM singer WHERE Age = (SELECT MAX(Age) FROM singer);'}",
+        "inputs": {
+          "sql": "SELECT Name, Song_Name, Song_release_year FROM singer WHERE Age = (SELECT MAX(Age) FROM singer);"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:55ef165f-b09c-9d33-4ded-689987a05e78",
+          "checkpoint_ns": "tools:55ef165f-b09c-9d33-4ded-689987a05e78"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"Name\", \"Song_Name\", \"Song_release_year\"], \"preview_rows\": [[\"Joe Sharp\", \"You\", \"1992\"]], \"dtypes\": {\"Name\": \"str\", \"Song_Name\": \"str\", \"Song_release_year\": \"str\"}, \"executed_sql\": \"SELECT Name, Song_Name, Song_release_year FROM singer WHERE Age = (SELECT MAX(Age) FROM singer);\"}' name='execute_sql' id='4ca18315-dba9-4f85-9e94-ea9c6eb4aad8' tool_call_id='gnqu7kkiH'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT Name, Song_Name, Song_release_year FROM singer WHERE Age = (SELECT MAX(Age) FROM singer);",
+    "answer_raw": "You",
+    "answer_normalized": "You",
+    "answer_text": "The youngest singer is Joe Sharp, who released the song 'You' in 1992."
+  },
+  "score": {
+    "correct": false,
+    "gold_value": "Love"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "trace_id": "trace_spider_47",
+  "question_id": "spider_47",
+  "question": "Find the weight of the youngest dog.",
+  "db_id": "pets_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{}",
+        "inputs": {},
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:71c9969f-11cb-a98a-08f4-15a6b5dec852",
+          "checkpoint_ns": "tools:71c9969f-11cb-a98a-08f4-15a6b5dec852"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 3, \"tables\": [{\"table\": \"Has_Pet\", \"columns\": [{\"cid\": 0, \"name\": \"StuID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 1, \"name\": \"PetID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"Student\", \"from_col\": \"StuID\", \"to_col\": \"StuID\"}, {\"id\": 1, \"seq\": 0, \"ref_table\": \"Pets\", \"from_col\": \"PetID\", \"to_col\": \"PetID\"}]}, {\"table\": \"Pets\", \"columns\": [{\"cid\": 0, \"name\": \"PetID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"PetType\", \"type\": \"VARCHAR(20)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"pet_age\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"weight\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}, {\"table\": \"Student\", \"columns\": [{\"cid\": 0, \"name\": \"StuID\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"LName\", \"type\": \"VARCHAR(12)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Fname\", \"type\": \"VARCHAR(12)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Age\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Sex\", \"type\": \"VARCHAR(1)\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Major\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Advisor\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 7, \"name\": \"city_code\", \"type\": \"VARCHAR(3)\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='935aa434-b426-4c32-a535-30b395d0817c' tool_call_id='YDgJFwqeh'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': \"SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;\"}",
+        "inputs": {
+          "sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:ccb56088-b697-9433-5cd9-449b809e652c",
+          "checkpoint_ns": "tools:ccb56088-b697-9433-5cd9-449b809e652c"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"weight\"], \"preview_rows\": [[9.3]], \"dtypes\": {\"weight\": \"float\"}, \"executed_sql\": \"SELECT weight FROM Pets WHERE PetType = \\'dog\\' ORDER BY pet_age ASC LIMIT 1;\"}' name='execute_sql' id='62b40527-f84b-4c08-8ff2-be5e2f868440' tool_call_id='kmvE9p7Wh'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;",
+    "answer_raw": 9.3,
+    "answer_normalized": 9.3,
+    "answer_text": "The weight of the youngest dog is 9.3."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": 9.3
+  }
+}

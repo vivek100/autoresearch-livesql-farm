@@ -1,0 +1,129 @@
+{
+  "trace_id": "trace_spider_90",
+  "question_id": "spider_90",
+  "question": "For each continent, list its id, name, and how many countries it has?",
+  "db_id": "car_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'continents'}",
+        "inputs": {
+          "table_name": "continents"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:421e5ff2-813c-b55f-67c6-d873e84e76a9",
+          "checkpoint_ns": "tools:421e5ff2-813c-b55f-67c6-d873e84e76a9"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'countries'}",
+        "inputs": {
+          "table_name": "countries"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            1,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:b02b38b7-95d9-8cbb-debd-658883bc61ab",
+          "checkpoint_ns": "tools:b02b38b7-95d9-8cbb-debd-658883bc61ab"
+        }
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"continents\", \"columns\": [{\"cid\": 0, \"name\": \"ContId\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Continent\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": []}]}' name='describe_schema' id='aaf6ae3f-64cc-46c9-a661-5da1100210ac' tool_call_id='DBb8e5OZf'"
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"countries\", \"columns\": [{\"cid\": 0, \"name\": \"CountryId\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"CountryName\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Continent\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"continents\", \"from_col\": \"Continent\", \"to_col\": \"ContId\"}]}]}' name='describe_schema' id='f151e473-141f-4d07-a71a-7b8d7b13a6f7' tool_call_id='LiBXizHdl'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT c.ContId, c.Continent, COUNT(co.CountryId) AS CountryCount FROM continents c LEFT JOIN countries co ON c.ContId = co.Continent GROUP BY c.ContId, c.Continent;', 'preview_rows': 5}",
+        "inputs": {
+          "sql": "SELECT c.ContId, c.Continent, COUNT(co.CountryId) AS CountryCount FROM continents c LEFT JOIN countries co ON c.ContId = co.Continent GROUP BY c.ContId, c.Continent;",
+          "preview_rows": 5
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:8db2a981-6a4c-a5c3-76f2-3c2fffd88b7e",
+          "checkpoint_ns": "tools:8db2a981-6a4c-a5c3-76f2-3c2fffd88b7e"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 5, \"columns\": [\"ContId\", \"Continent\", \"CountryCount\"], \"preview_rows\": [[1, \"america\", 3], [2, \"europe\", 6], [3, \"asia\", 2], [4, \"africa\", 2], [5, \"australia\", 2]], \"dtypes\": {\"ContId\": \"int\", \"Continent\": \"str\", \"CountryCount\": \"int\"}, \"executed_sql\": \"SELECT c.ContId, c.Continent, COUNT(co.CountryId) AS CountryCount FROM continents c LEFT JOIN countries co ON c.ContId = co.Continent GROUP BY c.ContId, c.Continent;\"}' name='execute_sql' id='6e700938-0701-4be7-903a-e6c024c32beb' tool_call_id='VfISxpP1s'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT c.ContId, c.Continent, COUNT(co.CountryId) AS CountryCount FROM continents c LEFT JOIN countries co ON c.ContId = co.Continent GROUP BY c.ContId, c.Continent;",
+    "answer_raw": null,
+    "answer_normalized": null,
+    "answer_text": "There are 5 continents, with the following number of countries each: america (3), europe (6), asia (2), africa (2), and australia (2)."
+  },
+  "score": {
+    "correct": false,
+    "gold_value": 1
+  }
+}

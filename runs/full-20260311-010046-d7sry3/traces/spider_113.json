@@ -1,0 +1,94 @@
+{
+  "trace_id": "trace_spider_113",
+  "question_id": "spider_113",
+  "question": "How many car makers are there in france?",
+  "db_id": "car_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'car_makers'}",
+        "inputs": {
+          "table_name": "car_makers"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:84d6684a-7fcc-934f-99a4-488e51d81293",
+          "checkpoint_ns": "tools:84d6684a-7fcc-934f-99a4-488e51d81293"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"car_makers\", \"columns\": [{\"cid\": 0, \"name\": \"Id\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"Maker\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"FullName\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Country\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"countries\", \"from_col\": \"Country\", \"to_col\": \"CountryId\"}]}]}' name='describe_schema' id='facb0de8-2c3e-4d00-b23d-e11d4220a7f0' tool_call_id='keMxR9XxU'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': \"SELECT COUNT(*) FROM car_makers WHERE LOWER(Country) = 'france'\"}",
+        "inputs": {
+          "sql": "SELECT COUNT(*) FROM car_makers WHERE LOWER(Country) = 'france'"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:4204c101-a552-f541-d134-97fa45f55d38",
+          "checkpoint_ns": "tools:4204c101-a552-f541-d134-97fa45f55d38"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"COUNT(*)\"], \"preview_rows\": [[0]], \"dtypes\": {\"COUNT(*)\": \"int\"}, \"executed_sql\": \"SELECT COUNT(*) FROM car_makers WHERE LOWER(Country) = \\'france\\'\"}' name='execute_sql' id='de4ce97f-ba0e-46ad-95ac-b7d095e15b84' tool_call_id='uP6akJzb4'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT COUNT(*) FROM car_makers WHERE LOWER(Country) = 'france'",
+    "answer_raw": 0,
+    "answer_normalized": 0,
+    "answer_text": "There are no car makers in France."
+  },
+  "score": {
+    "correct": false,
+    "gold_value": 3
+  }
+}

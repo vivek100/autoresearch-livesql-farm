@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_spider_92",
+  "question_id": "spider_92",
+  "question": "How many countries exist?",
+  "db_id": "car_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'country'}",
+        "inputs": {
+          "table_name": "country"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:a081bc47-39f3-948a-f8d8-2d1e189d79f6",
+          "checkpoint_ns": "tools:a081bc47-39f3-948a-f8d8-2d1e189d79f6"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: country\", \"available_tables\": [\"car_makers\", \"car_names\", \"cars_data\", \"continents\", \"countries\", \"model_list\"]}' name='describe_schema' id='7f18037e-9aab-400d-bede-527f4260c9f2' tool_call_id='S4tNKzzML'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'countries'}",
+        "inputs": {
+          "table_name": "countries"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:3b3afef0-7a03-683a-0885-3ba638efc77a",
+          "checkpoint_ns": "tools:3b3afef0-7a03-683a-0885-3ba638efc77a"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"countries\", \"columns\": [{\"cid\": 0, \"name\": \"CountryId\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"CountryName\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Continent\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"continents\", \"from_col\": \"Continent\", \"to_col\": \"ContId\"}]}]}' name='describe_schema' id='aabe9f4d-26de-47ab-968f-276d0ff3f6e3' tool_call_id='jXXvb04ss'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT COUNT(*) FROM countries'}",
+        "inputs": {
+          "sql": "SELECT COUNT(*) FROM countries"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:eecfb753-ec12-fb71-9eef-c9c5dc10fbb1",
+          "checkpoint_ns": "tools:eecfb753-ec12-fb71-9eef-c9c5dc10fbb1"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"COUNT(*)\"], \"preview_rows\": [[15]], \"dtypes\": {\"COUNT(*)\": \"int\"}, \"executed_sql\": \"SELECT COUNT(*) FROM countries\"}' name='execute_sql' id='148054ea-f811-4d26-b740-7f112471a193' tool_call_id='b7r2OcZ6d'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT COUNT(*) FROM countries",
+    "answer_raw": 15,
+    "answer_normalized": 15,
+    "answer_text": "There are 15 countries."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": 15
+  }
+}

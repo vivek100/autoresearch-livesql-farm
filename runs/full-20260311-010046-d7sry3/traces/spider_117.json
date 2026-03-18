@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_spider_117",
+  "question_id": "spider_117",
+  "question": "What is the average miles per gallon(mpg) of the cars with 4 cylinders?",
+  "db_id": "car_1",
+  "candidate": {
+    "git_sha": "43d8fb9b414486b2ad1a2ab016217f7f5e440363",
+    "model_name": "mistral-small-latest",
+    "runtime": "langgraph.prebuilt.create_react_agent",
+    "candidate_version": "candidate_v0",
+    "prompt_version": "prompt_v0"
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "type": "tool_call",
+      "step_index": 0,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'cars'}",
+        "inputs": {
+          "table_name": "cars"
+        },
+        "metadata": {
+          "langgraph_step": 2,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:b75c4ac7-5e43-f0bd-7c29-6620bcb7c7fb",
+          "checkpoint_ns": "tools:b75c4ac7-5e43-f0bd-7c29-6620bcb7c7fb"
+        }
+      }
+    },
+    {
+      "event_id": 2,
+      "type": "tool_result",
+      "step_index": 0,
+      "payload": {
+        "result": "content='{\"ok\": false, \"error\": \"Table not found: cars\", \"available_tables\": [\"car_makers\", \"car_names\", \"cars_data\", \"continents\", \"countries\", \"model_list\"]}' name='describe_schema' id='2076aec9-abbc-46aa-9e87-c1bfc1c3c912' tool_call_id='bu4esUE4G'"
+      }
+    },
+    {
+      "event_id": 3,
+      "type": "tool_call",
+      "step_index": 1,
+      "payload": {
+        "tool_name": "describe_schema",
+        "input_str": "{'table_name': 'cars_data'}",
+        "inputs": {
+          "table_name": "cars_data"
+        },
+        "metadata": {
+          "langgraph_step": 4,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:7d5c611b-022a-25c3-3b2f-cd86ef8d22d0",
+          "checkpoint_ns": "tools:7d5c611b-022a-25c3-3b2f-cd86ef8d22d0"
+        }
+      }
+    },
+    {
+      "event_id": 4,
+      "type": "tool_result",
+      "step_index": 1,
+      "payload": {
+        "result": "content='{\"ok\": true, \"table_count\": 1, \"tables\": [{\"table\": \"cars_data\", \"columns\": [{\"cid\": 0, \"name\": \"Id\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": true}, {\"cid\": 1, \"name\": \"MPG\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 2, \"name\": \"Cylinders\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 3, \"name\": \"Edispl\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 4, \"name\": \"Horsepower\", \"type\": \"TEXT\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 5, \"name\": \"Weight\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 6, \"name\": \"Accelerate\", \"type\": \"REAL\", \"notnull\": false, \"default\": null, \"pk\": false}, {\"cid\": 7, \"name\": \"Year\", \"type\": \"INTEGER\", \"notnull\": false, \"default\": null, \"pk\": false}], \"foreign_keys\": [{\"id\": 0, \"seq\": 0, \"ref_table\": \"car_names\", \"from_col\": \"Id\", \"to_col\": \"MakeId\"}]}]}' name='describe_schema' id='c491cdd7-be87-4063-8615-a1b0300cbf7e' tool_call_id='TafiiCyhU'"
+      }
+    },
+    {
+      "event_id": 5,
+      "type": "tool_call",
+      "step_index": 2,
+      "payload": {
+        "tool_name": "execute_sql",
+        "input_str": "{'sql': 'SELECT AVG(MPG) FROM cars_data WHERE Cylinders = 4;'}",
+        "inputs": {
+          "sql": "SELECT AVG(MPG) FROM cars_data WHERE Cylinders = 4;"
+        },
+        "metadata": {
+          "langgraph_step": 6,
+          "langgraph_node": "tools",
+          "langgraph_triggers": [
+            "__pregel_push"
+          ],
+          "langgraph_path": [
+            "__pregel_push",
+            0,
+            false
+          ],
+          "langgraph_checkpoint_ns": "tools:c7b9aafb-2bee-5b71-0c65-f572e620cab2",
+          "checkpoint_ns": "tools:c7b9aafb-2bee-5b71-0c65-f572e620cab2"
+        }
+      }
+    },
+    {
+      "event_id": 6,
+      "type": "tool_result",
+      "step_index": 2,
+      "payload": {
+        "result": "content='{\"ok\": true, \"row_count\": 1, \"columns\": [\"AVG(MPG)\"], \"preview_rows\": [[28.86231884057971]], \"dtypes\": {\"AVG(MPG)\": \"float\"}, \"executed_sql\": \"SELECT AVG(MPG) FROM cars_data WHERE Cylinders = 4;\"}' name='execute_sql' id='ac1a3c2a-a693-4c53-861a-4ed6908bed7e' tool_call_id='ID2lRfDX6'"
+      }
+    }
+  ],
+  "final": {
+    "status": "success",
+    "final_sql": "SELECT AVG(MPG) FROM cars_data WHERE Cylinders = 4;",
+    "answer_raw": 28.86231884057971,
+    "answer_normalized": 28.86231884057971,
+    "answer_text": "The average miles per gallon (mpg) of the cars with 4 cylinders is 28.86."
+  },
+  "score": {
+    "correct": true,
+    "gold_value": 28.86231884057971
+  }
+}
