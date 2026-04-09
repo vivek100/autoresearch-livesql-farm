@@ -2,24 +2,32 @@
 
 Local-first analytics agent benchmark loop with:
 
-1. LangGraph built-in ReAct runtime
-2. Local run artifacts (`runs/<run_id>/...`)
-3. Deterministic RCA generation and update CLI
-4. Prompt governance checks
-5. Git branch helpers for restart-from-version workflows
+1. Custom ReAct runtime with Kimi compatibility layer
+2. Tinker API LLM integration
+3. LiveSQLBench benchmark dataset
+4. Local run artifacts (`runs/<run_id>/...`)
+5. Deterministic RCA generation and update CLI
+6. Prompt governance checks
+7. Git branch helpers for restart-from-version workflows
 
 ## Runtime Structure
 
 1. `candidate/agent_graph.py`
    Thin ReAct execution wrapper only.
-2. `candidate/response_parser.py`
+2. `candidate/llm.py`
+   Tinker API LLM integration.
+3. `candidate/react.py`
+   Custom ReAct agent builder with safe tool wrapping and Kimi compatibility.
+4. `candidate/kimi_compat.py`
+   Compatibility helpers for Kimi text-emitted tool calls.
+5. `candidate/response_parser.py`
    Final answer JSON and SQL extraction helpers.
-3. `candidate/observability.py`
+6. `candidate/observability.py`
    Default OpenInference + Phoenix instrumentation bootstrap.
-4. `candidate/tracing.py`
+7. `candidate/tracing.py`
    Local trace artifact capture used for RCA files.
-5. `harness/benchmark.py`
-    Benchmark loop writing manifest/predictions/failures/traces/rca.
+8. `harness/benchmark.py`
+    Benchmark loop writing manifest/predictions/failures/traces/rca for LiveSQLBench.
 
 This separation keeps the ReAct runtime readable and keeps tracing concerns isolated.
 
@@ -30,8 +38,10 @@ Research notes:
 ## Quick Start
 
 1. Set env vars in repo root `.env` or `analytics-agent-autoresearch/.env`:
-   - `MISTRAL_API_KEY`
-   - `SPIDER_ROOT` (optional if local Spider path differs)
+   - `TINKER_API_KEY` (required)
+   - `TINKER_MODEL_PATH` (required, e.g., `moonshotai/Kimi-K2.5`)
+   - `TINKER_BASE_URL` (optional, default: `https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1`)
+   - `LIVESQL_ROOT` (optional, default: `data/livesqlbench`)
    - `PHOENIX_COLLECTOR_ENDPOINT` (optional, default `http://127.0.0.1:6006/v1/traces`)
    - `TRACE_BACKEND` (optional, default `phoenix`; set `none` to disable)
 2. Use parent venv Python:
@@ -56,40 +66,20 @@ You can pass rich metadata through run CLI for artifact logging:
 
 ## Current Findings
 
-Current recorded results from `results.tsv`:
+**Migrated to LiveSQLBench + Tinker API**
 
-| Commit | Run ID | Lane | Split | Accuracy | Status | Notes |
-|---|---|---|---|---:|---|---|
-| `1844c71` | `run_1_xk2hr6zt` | `small` | `slice_0_100` | 0.2100 | keep | baseline |
-| `34d75d4` | `run_2_ank4a2aw` | `small` | `slice_0_100` | 0.6900 | keep | big gain after contract and tool fixes |
-| `e6d031a` | `run_3_9xild9wl` | `small` | `slice_100_100` | 0.3700 | keep | different slice exposed generalization gaps |
-| `eeef51e` | `run_4_0uz4zvcz` | `small` | `slice_200_100` | 0.5300 | keep | after schema tool and SQL no case recovery improved over run_3 |
+This submission has been migrated from Spider/Mistral to LiveSQLBench/Tinker API with the Kimi-compatible ReAct agent. A new baseline needs to be established on the LiveSQLBench dataset.
 
-What these runs tell us:
+**Key infrastructure value:**
+- Local-first eval harness with reproducible runs
+- Deterministic RCA generation for systematic debugging
+- Trace capture and structured iteration lineage
+- Custom ReAct agent with safe tool wrapping and Kimi compatibility
 
-1. The project demonstrates a clear eval-driven improvement arc, from a `21.0%` baseline to substantially better performance after prompt and tool-contract fixes.
-2. The largest early gain came from enforcing a strict scalar `answer_value` contract and making tool usage more reliable.
-3. Cross-slice performance variation shows why agent evals need broader benchmark coverage: improvements on one slice do not guarantee generalization.
-4. The core value of the project is not just higher accuracy, but the infrastructure around it: reproducible runs, local artifacts, deterministic RCA, trace capture, and structured iteration lineage.
-
-Immediate next iteration areas:
-
-1. Push beyond prompt-only gains by tightening schema reasoning and SQL recovery behavior.
-2. Use RCA summaries to separate output-contract failures from true reasoning failures.
-3. Run broader and more randomized benchmark slices so future gains are measured on generalization, not just local improvements.
-
-## Prompt-Iteration Accuracy Timeline
-
-This is the headline improvement story carried into the submission:
-
-| Version | Eval set | Accuracy | What changed |
-|---|---|---:|---|
-| v0 | 100q | 21.0% | Baseline prompt and weak scalar contract |
-| v3 | 100q | 74.4% | Enforced scalar `answer_value` and improved extraction flow |
-| v5 | 39q | 89.7% | Added few-shot examples on a small curated slice |
-| v6 | 100q randomized | 82.0% | Expanded to a larger randomized set and exposed generalization gaps |
-| v7 | 100q randomized | 83.0% | Refined examples with deterministic ordering and safer joins |
-| v8 | 100q randomized | 84.0% | Added real-data examples and clearer column extraction reasoning |
+**Next steps:**
+1. Run initial smoke benchmark to establish baseline on LiveSQLBench
+2. Use RCA summaries to identify failure patterns
+3. Iterate on prompts and tool contracts for improvement |
 
 ## Connectivity Note
 

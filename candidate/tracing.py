@@ -14,6 +14,7 @@ from typing import Any
 from uuid import UUID
 
 from langchain_core.callbacks import BaseCallbackHandler
+from langchain_core.outputs import LLMResult
 
 
 @dataclass
@@ -117,6 +118,75 @@ class LocalTraceCallbackHandler(BaseCallbackHandler):
         )
         self._step_index += 1
 
+    def on_llm_start(
+        self,
+        serialized: dict[str, Any],
+        prompts: list[str],
+        *,
+        run_id: UUID,
+        parent_run_id: UUID | None = None,
+        tags: list[str] | None = None,
+        metadata: dict[str, Any] | None = None,
+        invocation_params: dict[str, Any] | None = None,
+        **kwargs: Any,
+    ) -> Any:
+        model_name = (
+            serialized.get("name")
+            or serialized.get("id")
+            or (invocation_params or {}).get("model")
+            or "unknown_llm"
+        )
+        self._events.append(
+            ToolTraceEvent(
+                event_id=self._next_event_id(),
+                type="llm_start",
+                step_index=self._step_index,
+                payload={
+                    "model_name": str(model_name),
+                    "prompt_count": len(prompts),
+                    "metadata": metadata or {},
+                },
+            )
+        )
+
+    def on_llm_end(
+        self,
+        response: LLMResult,
+        *,
+        run_id: UUID,
+        parent_run_id: UUID | None = None,
+        **kwargs: Any,
+    ) -> Any:
+        llm_output = response.llm_output if isinstance(response, LLMResult) else None
+        self._events.append(
+            ToolTraceEvent(
+                event_id=self._next_event_id(),
+                type="llm_end",
+                step_index=self._step_index,
+                payload={"llm_output": llm_output or {}},
+            )
+        )
+
+    def on_llm_error(
+        self,
+        error: BaseException,
+        *,
+        run_id: UUID,
+        parent_run_id: UUID | None = None,
+        **kwargs: Any,
+    ) -> Any:
+        self._events.append(
+            ToolTraceEvent(
+                event_id=self._next_event_id(),
+                type="llm_error",
+                step_index=self._step_index,
+                payload={
+                    "error_type": type(error).__name__,
+                    "error": str(error),
+                },
+            )
+        )
+
     def to_events(self) -> list[dict[str, Any]]:
         return [e.to_dict() for e in self._events]
 
@@ -201,4 +271,3 @@ def events_from_messages(messages: list[Any]) -> list[dict[str, Any]]:
             event_id += 1
             step += 1
     return events
-

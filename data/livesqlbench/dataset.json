@@ -1,0 +1,239 @@
+[
+  {
+    "instance_id": "alien_1",
+    "db_id": "alien",
+    "question": "I want to analyze how the Signal-to-Noise Quality Indicator (SNQI) varies across different weather conditions. For each weather condition, give weather condition name, the average SNQI, the median SNQI, and count how many analyzable signals there are. Sort the result by average SNQI in descending order.",
+    "category": "Query",
+    "difficulty": "Moderate",
+    "high_level": true,
+    "conditions": {
+      "decimal": [],
+      "distinct": false,
+      "order": true
+    },
+    "preprocess_sql": [],
+    "clean_up_sqls": [],
+    "external_knowledge": [
+      0,
+      50
+    ],
+    "test_cases": [],
+    "sol_sql": [
+      "/* \nIntent: Analyze signal quality (SNQI) with atmospheric conditions using window functions\nKnowledge Used: SNQI (id:0)\nAdvanced Features: Window functions, conditional aggregation\n*/\nWITH signal_quality AS (\n    -- Step 1: Calculate SNQI for all signals with their observation conditions\n    SELECT \n        s.SignalRegistry,\n        s.SnrRatio - 0.1 * ABS(s.NoiseFloorDbm) AS SNQI,\n        o.WeathProfile\n    FROM Signals s\n    JOIN Telescopes t ON s.TelescRef = t.TelescRegistry\n    JOIN Observatories o ON t.ObservStation = o.ObservStation\n)\n-- Step 2: Rank signals by quality within weather profiles\nSELECT \n    WeathProfile,\n    AVG(SNQI) AS avg_snqi,\n    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY SNQI) AS median_snqi,\n    COUNT(*) FILTER (WHERE SNQI > 0) AS analyzable_signals\nFROM signal_quality\nGROUP BY WeathProfile\nORDER BY avg_snqi DESC;"
+    ]
+  },
+  {
+    "instance_id": "alien_2",
+    "db_id": "alien",
+    "question": "Classify signals by TOLS Category, and for each group, show the category name, signal count, average Bandwidth-to-Frequency Ratio, and the standard deviation of the anomaly score.",
+    "category": "Query",
+    "difficulty": "Simple",
+    "high_level": false,
+    "conditions": {
+      "decimal": [],
+      "distinct": false,
+      "order": false
+    },
+    "preprocess_sql": [],
+    "clean_up_sqls": [],
+    "external_knowledge": [
+      3,
+      51,
+      52
+    ],
+    "test_cases": [],
+    "sol_sql": [
+      "/*\nIntent: Analyze distribution of technosignature probabilities using statistical functions\nKnowledge Used: TOLS (id:3)\nAdvanced Features: Statistical functions, CASE expressions\n*/\n-- Step 1: Calculate TOLS for all signals with probability data\nSELECT \n    -- Step 2: Bin the TOLS values into categories\n    CASE \n        WHEN p.TechSigProb * (1 - p.NatSrcProb) * p.SigUnique * (0.5 + p.AnomScore/10) < 0.25 THEN 'Low'\n        WHEN p.TechSigProb * (1 - p.NatSrcProb) * p.SigUnique * (0.5 + p.AnomScore/10) < 0.75 THEN 'Medium'\n        ELSE 'High'\n    END AS tol_category,\n    -- Step 3: Calculate statistics for each category\n    COUNT(*) AS signal_count,\n    AVG(s.BwHz/(s.CenterFreqMhz * 1000000)) AS avg_bfr,\n    STDDEV(p.AnomScore) AS anomaly_stddev\nFROM Signals s\nJOIN SignalProbabilities p ON s.SignalRegistry = p.SignalRef\nGROUP BY tol_category;"
+    ]
+  },
+  {
+    "instance_id": "alien_3",
+    "db_id": "alien",
+    "question": "Analyze how lunar interference affects observations by showing the current moon phase, average Lunar Interference Factor (LIF) and the count of high lunar interference events for each observatory, sorted by average LIF in descending order.",
+    "category": "Query",
+    "difficulty": "Simple",
+    "high_level": false,
+    "conditions": {
+      "decimal": [],
+      "distinct": false,
+      "order": true
+    },
+    "preprocess_sql": [],
+    "clean_up_sqls": [],
+    "external_knowledge": [
+      9,
+      53
+    ],
+    "test_cases": [],
+    "sol_sql": [
+      "/*\nIntent: Quantify lunar interference impact using LIF calculation\nKnowledge Used: LIF (id:9)\nAdvanced Features: Date functions, lateral join\n*/\n-- Step 1: Calculate LIF for all observations with lunar data\nSELECT \n    o.ObservStation,\n    -- Step 2: Calculate average LIF by moon phase\n    o.LunarStage,\n    AVG((1 - o.LunarDistDeg/180) * (1 - o.AtmosTransparency)) AS avg_lif,\n    -- Step 3: Count high interference events\n    COUNT(*) FILTER (WHERE (1 - o.LunarDistDeg/180) * (1 - o.AtmosTransparency) > 0.5) AS high_interf_count\nFROM Observatories o\nGROUP BY o.ObservStation, o.LunarStage\nORDER BY avg_lif DESC;"
+    ]
+  },
+  {
+    "instance_id": "alien_4",
+    "db_id": "alien",
+    "question": "Which observatory stations are discovering the most potential technosignatures? For each station, display the observatory name, how many signals meet our technosignature criteria, their average TOLS score, average BFR values, and what percentage of all detected technosignatures they've found. I need this ranked by the stations with the most discoveries first.",
+    "category": "Query",
+    "difficulty": "Moderate",
+    "high_level": true,
+    "conditions": {
+      "decimal": [],
+      "distinct": false,
+      "order": true
+    },
+    "preprocess_sql": [],
+    "clean_up_sqls": [],
+    "external_knowledge": [
+      10,
+      3
+    ],
+    "test_cases": [],
+    "sol_sql": [
+      "/*\nIntent: Evaluate detection efficiency for potential technosignatures\nKnowledge Used: Technosignature (id:10), TOLS (id:3)\nAdvanced Features: Common Table Expressions, complex filtering\n*/\nWITH tech_signals AS (\n    SELECT \n        s.SignalRegistry,\n        s.TelescRef,\n        p.TechSigProb * (1 - p.NatSrcProb) * p.SigUnique * (0.5 + p.AnomScore/10) AS TOLS,\n        s.BwHz/(s.CenterFreqMhz * 1000000) AS BFR\n    FROM Signals s\n    JOIN SignalProbabilities p ON s.SignalRegistry = p.SignalRef\n    WHERE p.TechSigProb > 0.7 \n      AND p.NatSrcProb < 0.3 \n      AND p.ArtSrcProb < 50\n      AND s.BwHz/(s.CenterFreqMhz * 1000000) < 0.001\n)\nSELECT \n    t.ObservStation,\n    COUNT(*) AS potential_tech_signals,\n    AVG(ts.TOLS) AS avg_tols,\n    AVG(ts.BFR) AS avg_bfr,\n    COUNT(*) * 100.0 / (SELECT COUNT(*) FROM tech_signals) AS percentage_of_total\nFROM tech_signals ts\nJOIN Telescopes t ON ts.TelescRef = t.TelescRegistry\nGROUP BY t.ObservStation\nORDER BY potential_tech_signals DESC;"
+    ]
+  },
+  {
+    "instance_id": "alien_5",
+    "db_id": "alien",
+    "question": "Show me a breakdown of signal modulation types with at least 5 occurrences. For each modulation type, display the modulation type, the number of signals, the average Modulation Complexity Score (MCS), and average signal-to-noise ratio (SNR). Also include a detailed JSON with each signal's MCS and SNR values. Keys are the signal record IDs, and values are inner objects containing two fields: `mcs` \u2013 the signal\u2019s MCS value, and `snr` \u2013 the SNR value.",
+    "category": "Query",
+    "difficulty": "Moderate",
+    "high_level": true,
+    "conditions": {
+      "decimal": [],
+      "distinct": false,
+      "order": false
+    },
+    "preprocess_sql": [],
+    "clean_up_sqls": [],
+    "external_knowledge": [
+      30
+    ],
+    "test_cases": [],
+    "sol_sql": [
+      "/*\nIntent: Evaluate effectiveness of different modulation types\nKnowledge Used: MCS (id:30)\nAdvanced Features: JSON functions, advanced aggregation\n*/\nSELECT \n    s.ModType,\n    COUNT(*) AS signal_count,\n    AVG(s.ModIndex * (1 + (1 - ABS(s.FreqDriftHzs)/(s.FreqMhz*1000)) * \n        s.SigDurSec/(1 + s.DoppShiftHz/1000)) *\n        CASE \n            WHEN s.ModType = 'AM' THEN 2\n            WHEN s.ModType = 'FM' THEN 1.5\n            ELSE 1\n        END) AS avg_mcs,\n    AVG(s.SnrRatio) AS avg_snr,\n    JSON_OBJECT_AGG(\n        s.SignalRegistry,\n        JSON_BUILD_OBJECT(\n            'mcs', s.ModIndex * (1 + (1 - ABS(s.FreqDriftHzs)/(s.FreqMhz*1000)) * \n                   s.SigDurSec/(1 + s.DoppShiftHz/1000)) *\n                   CASE \n                       WHEN s.ModType = 'AM' THEN 2\n                       WHEN s.ModType = 'FM' THEN 1.5\n                       ELSE 1\n                   END,\n            'snr', s.SnrRatio\n        )\n    ) AS signal_details\nFROM Signals s\nWHERE s.ModType IS NOT NULL\nGROUP BY s.ModType\nHAVING COUNT(*) > 5;"
+    ]
+  },
+  {
+    "instance_id": "alien_6",
+    "db_id": "alien",
+    "question": "Which observatories have the most promising signals worth investigating? I need a summary by observatory showing the observatory name, their total signal count, average Research Priority Index (RPI) and approximate Confirmation Confidence Score (CCS) values, number of high-priority (RPI > 3) signals, number of high-confidence signals, and especially the number of signals that meet both criteria. Sort the results by observatories with the most high-priority-and-high-confidence signals first.",
+    "category": "Query",
+    "difficulty": "Moderate",
+    "high_level": true,
+    "conditions": {
+      "decimal": [],
+      "distinct": false,
+      "order": true
+    },
+    "preprocess_sql": [],
+    "clean_up_sqls": [],
+    "external_knowledge": [
+      8,
+      47,
+      54
+    ],
+    "test_cases": [],
+    "sol_sql": [
+      "/*\nIntent: Optimize research priorities based on multiple factors\nKnowledge Used: RPI (id:8), CCS (id:36)\nAdvanced Features: Complex calculations, window functions\n*/\nWITH priority_calc AS (\n    SELECT \n        s.SignalRegistry,\n        (p.TechSigProb * 4 + p.BioSigProb/100 + p.SigUnique * 2 + p.AnomScore/2) * \n            (1 - p.FalsePosProb) AS RPI,\n        (1 - p.FalsePosProb) * d.DecodeConf * \n            (CASE WHEN s.SnrRatio - 0.1 * ABS(s.NoiseFloorDbm) > 0 \n                  THEN (s.SnrRatio - 0.1 * ABS(s.NoiseFloorDbm))/10 + 0.5 \n                  ELSE 0.1 END) AS CCS_approx,\n        o.ObservStation\n    FROM Signals s\n    JOIN SignalProbabilities p ON s.SignalRegistry = p.SignalRef\n    JOIN SignalDecoding d ON s.SignalRegistry = d.SignalRef\n    JOIN Telescopes t ON s.TelescRef = t.TelescRegistry\n    JOIN Observatories o ON t.ObservStation = o.ObservStation\n)\nSELECT \n    ObservStation,\n    COUNT(*) AS signal_count,\n    AVG(RPI) AS avg_rpi,\n    AVG(CCS_approx) AS avg_ccs,\n    COUNT(*) FILTER (WHERE RPI > 3) AS high_priority_signals,\n    COUNT(*) FILTER (WHERE CCS_approx > 0.8) AS high_confidence_signals,\n    COUNT(*) FILTER (WHERE RPI > 3 AND CCS_approx > 0.8) AS high_priority_high_confidence\nFROM priority_calc\nGROUP BY ObservStation\nORDER BY high_priority_high_confidence DESC;"
+    ]
+  },
+  {
+    "instance_id": "alien_7",
+    "db_id": "alien",
+    "question": "Create a report evaluating observatory conditions using the Atmospheric Observability Index (AOI) and identifying stations meeting Optimal Observing Window (OOW) criteria. The output should group stations by whether meets OOW (bool:True or False). For each group, you should provide its boolean value of OOW, the count of stations, average AOI (rounded to 3 decimal places) and a JSON array whose elements each include  `station` (observatory name), `aoi` (AOI value), `lunar_factors` object with `stage` (lunar stage) and `distance` (lunar distance), and `solar_status` (solar status).",
+    "category": "Query",
+    "difficulty": "Moderate",
+    "high_level": true,
+    "conditions": {
+      "decimal": [
+        3
+      ],
+      "distinct": false,
+      "order": false
+    },
+    "preprocess_sql": [],
+    "clean_up_sqls": [],
+    "external_knowledge": [
+      1,
+      13
+    ],
+    "test_cases": [],
+    "sol_sql": [
+      "-- This query evaluates optimal observatory conditions using Atmospheric Observability Index (AOI)\n-- and generates a JSON report of environmental factors using JSON aggregation functions.\n-- Using KB knowledge: Atmospheric Observability Index (AOI) [id: 1], Optimal Observing Window (OOW) [id: 13]\n\n-- Step 1: Calculate AOI for each observatory and determine if conditions meet Optimal Observing Window criteria\nWITH observatory_conditions AS (\n    SELECT \n        o.ObservStation,\n        o.AtmosTransparency * (1 - o.HumidityRate/100) * (1 - 0.02 * o.WindSpeedMs) AS aoi,  -- AOI formula from KB\n        o.LunarStage,\n        o.LunarDistDeg,\n        o.SolarStatus,\n        -- Check if conditions meet OOW criteria\n        CASE WHEN \n            o.AtmosTransparency * (1 - o.HumidityRate/100) * (1 - 0.02 * o.WindSpeedMs) > 0.85 AND\n            (o.LunarStage = 'New' OR o.LunarStage = 'First Quarter') AND\n            o.LunarDistDeg > 45 AND\n            (o.SolarStatus = 'Low' OR o.SolarStatus = 'Moderate')\n        THEN TRUE ELSE FALSE END AS is_optimal_window\n    FROM \n        Observatories o\n)\n-- Step 2: Generate JSON report grouping observatories by optimal condition status\nSELECT \n    is_optimal_window,\n    COUNT(*) AS station_count,\n    ROUND(AVG(aoi)::numeric, 3) AS avg_aoi,\n    -- Use JSON aggregation to create detailed environmental factors report\n    jsonb_agg(jsonb_build_object(\n        'station', ObservStation,\n        'aoi', ROUND(aoi::numeric, 3),\n        'lunar_factors', jsonb_build_object(\n            'stage', LunarStage,\n            'distance', LunarDistDeg\n        ),\n        'solar_status', SolarStatus\n    )) AS observatory_details\nFROM \n    observatory_conditions\nGROUP BY \n    is_optimal_window;"
+    ]
+  },
+  {
+    "instance_id": "alien_8",
+    "db_id": "alien",
+    "question": "Could you scan our database for potential signals matching Narrowband Technological Marker profiles? I need the signal fingerprints - ID, central frequency, frequency drift, Bandwidth-Frequency Ratio and the classification of NTM categories based on spectral coherence.",
+    "category": "Query",
+    "difficulty": "Simple",
+    "high_level": true,
+    "conditions": {
+      "decimal": [],
+      "distinct": false,
+      "order": false
+    },
+    "preprocess_sql": [],
+    "clean_up_sqls": [],
+    "external_knowledge": [
+      15,
+      39
+    ],
+    "test_cases": [],
+    "sol_sql": [
+      "/* \n-- Intent: Find signals matching Narrowband Technological Marker criteria with spectrum stability\n-- Uses KB item 15 (NTM) and advanced LATERAL JOIN for computational efficiency\n*/\n-- Step 1: Calculate BFR using a lateral join to improve query performance\nSELECT \n    s.SignalRegistry,\n    s.CenterFreqMhz,\n    s.FreqDriftHzs,\n    -- Calculate BFR using lateral join results\n    nbcalc.BFR,\n    -- Using CASE for categorization based on NTM criteria\n    CASE \n        WHEN nbcalc.BFR < 0.0001 AND s.FreqDriftHzs < 0.1 \n        THEN 'Strong NTM'\n        WHEN nbcalc.BFR < 0.0005 AND s.FreqDriftHzs < 0.5 \n        THEN 'Moderate NTM'\n        ELSE 'Not NTM'\n    END AS ntm_classification\nFROM Signals s\n-- Step 2: Use LATERAL JOIN for efficient calculation of BFR\nCROSS JOIN LATERAL (\n    SELECT (s.BwHz/(s.CenterFreqMhz * 1000000)) AS BFR\n) AS nbcalc\n-- Step 3: Apply primary NTM criteria from KB item 15\nWHERE \n    nbcalc.BFR < 0.001 AND\n    s.FreqDriftHzs < 1.0;"
+    ]
+  },
+  {
+    "instance_id": "alien_9",
+    "db_id": "alien",
+    "question": "Give me a ranked list of all our observatory sites by their current observation quality. For each observatory, I need fileds: the station name, telescope ID, calculated Observation Quality Factor, any equipment problems listed together sepearated by comma, how many issues there are, and the Observational Confidence Level. Please rank them by Observation Quality Factor with the best first.",
+    "category": "Query",
+    "difficulty": "Moderate",
+    "high_level": true,
+    "conditions": {
+      "decimal": [],
+      "distinct": false,
+      "order": true
+    },
+    "preprocess_sql": [],
+    "clean_up_sqls": [],
+    "external_knowledge": [
+      16,
+      32,
+      55
+    ],
+    "test_cases": [],
+    "sol_sql": [
+      "-- Intent: Evaluate combined observatory conditions and equipment status for observation quality\n-- Uses KB item 16 (OCL) and 32 (OQF), with advanced array functions\n-- Step 1: Calculate observation quality metrics using various observatory and telescope parameters\nWITH quality_assessment AS (\n    SELECT \n        o.ObservStation,\n        t.TelescRegistry,\n        o.AtmosTransparency,\n        o.HumidityRate,\n        o.WindSpeedMs,\n        o.LunarDistDeg,\n        t.EquipStatus,\n        t.CalibrStatus,\n        t.PointAccArc,\n        -- Calculate AOI from KB item 1\n        (o.AtmosTransparency * (1 - o.HumidityRate/100) * (1 - 0.02 * o.WindSpeedMs)) AS AOI,\n        -- Calculate LIF from KB item 9\n        ((1 - o.LunarDistDeg/180) * (1 - o.AtmosTransparency)) AS LIF,\n        -- Store equipment issues in array for analysis\n        ARRAY[\n            CASE WHEN t.EquipStatus != 'Degraded' THEN t.EquipStatus ELSE NULL END,\n            CASE WHEN t.CalibrStatus != 'Overdue' THEN t.CalibrStatus ELSE NULL END,\n            CASE WHEN t.CoolSysStatus != 'Warning' THEN t.CoolSysStatus ELSE NULL END\n        ] AS equipment_issues\n    FROM Observatories o\n    INNER JOIN Telescopes t ON o.ObservStation = t.ObservStation\n)\n-- Step 2: Apply OCL criteria and calculate OQF using conditional logic\nSELECT \n    qa.ObservStation,\n    qa.TelescRegistry,\n    -- Calculate OQF based on KB item 32\n    (qa.AOI * (1 - qa.LIF) * (CASE WHEN qa.PointAccArc < 2 THEN 1 ELSE 2/qa.PointAccArc END)) AS OQF,\n    -- Display equipment issues using array functions\n    ARRAY_TO_STRING(ARRAY_REMOVE(qa.equipment_issues, NULL), ', ') AS identified_issues,\n    -- Count equipment issues using array functions\n    CARDINALITY(ARRAY_REMOVE(qa.equipment_issues, NULL)) AS issue_count,\n    -- Apply OCL classification criteria from KB item 16\n    CASE \n        WHEN qa.AOI > 0.8 AND qa.EquipStatus = 'Operational' AND qa.CalibrStatus = 'Current' \n        THEN 'High'\n        WHEN qa.AOI BETWEEN 0.5 AND 0.8 \n        THEN 'Medium'\n        ELSE 'Low'\n    END AS ocl_classification\nFROM quality_assessment qa\n-- Step 3: Order by calculated quality for prioritization\nORDER BY OQF DESC;"
+    ]
+  },
+  {
+    "instance_id": "alien_10",
+    "db_id": "alien",
+    "question": "I want to find signals that might contain structured information by analyzing their stability patterns. For each candidate, show the signal ID, signal type, Signal Stability Metric, one field that contains a combined stability textual report formatted exactly as: \"Frequency: <frequency stability>, Phase: <phase stability>, Integrity: <signal integrity>\" and the CIP Classification Label.",
+    "category": "Query",
+    "difficulty": "Moderate",
+    "high_level": true,
+    "conditions": {
+      "decimal": [
+        3
+      ],
+      "distinct": false,
+      "order": false
+    },
+    "preprocess_sql": [],
+    "clean_up_sqls": [],
+    "external_knowledge": [
+      7,
+      11,
+      24
+    ],
+    "test_cases": [],
+    "sol_sql": [
+      "-- Intent: Identify signals showing evidence of coherent information patterns based on stability\n-- Uses KB item 7 (SSM) and 11 (CIP), with advanced string aggregation\n-- Step 1: Calculate Signal Stability Metric (SSM) using mathematical operations\nWITH stability_analysis AS (\n    SELECT \n        s.SignalRegistry,\n        s.SignalClass,\n        s.FreqDriftHzs,\n        s.FreqMhz,\n        s.SigDurSec,\n        s.DoppShiftHz,\n        s.ModType,\n        s.ModIndex,\n        sd.SigIntegrity,\n        sd.FreqStab,\n        sd.PhaseStab,\n        sc.EntropyVal,\n        -- Calculate SSM per KB item 7\n        ((1 - ABS(s.FreqDriftHzs)/(s.FreqMhz * 1000)) * \n         (s.SigDurSec/(1 + s.DoppShiftHz/1000))) AS SSM\n    FROM Signals s\n    INNER JOIN SignalDynamics sd ON s.SignalRegistry = sd.SignalRef\n    INNER JOIN SignalClassification sc ON s.SignalRegistry = sc.SignalRef\n)\n-- Step 2: Analyze coherent information patterns with string aggregation\nSELECT \n    sa.SignalRegistry,\n    sa.SignalClass,\n    ROUND(sa.SSM::numeric, 3) AS SSM,\n    -- Aggregate stability factors using string_agg\n    string_agg(\n        CASE \n            WHEN attribute = 'FreqStab' THEN 'Frequency: ' || value\n            WHEN attribute = 'PhaseStab' THEN 'Phase: ' || value\n            WHEN attribute = 'SigIntegrity' THEN 'Integrity: ' || value\n        END,\n        ', ' ORDER BY attribute\n    ) AS stability_factors,\n    -- Evaluate if signal meets CIP criteria from KB item 11\n    CASE \n        WHEN sa.SSM > 0.8 AND \n             sa.EntropyVal BETWEEN 0.4 AND 0.8 AND\n             sa.ModIndex > 0.5\n        THEN 'Coherent Information Pattern Detected'\n        WHEN sa.SSM > 0.6 AND sa.EntropyVal BETWEEN 0.3 AND 0.9\n        THEN 'Potential Information Pattern'\n        ELSE 'No Clear Pattern'\n    END AS pattern_assessment\nFROM stability_analysis sa\n-- Step 3: Use lateral join with unnest to transform stability attributes into rows for aggregation\nCROSS JOIN LATERAL (\n    SELECT unnest(ARRAY['FreqStab', 'PhaseStab', 'SigIntegrity']) AS attribute,\n           unnest(ARRAY[sa.FreqStab, sa.PhaseStab, sa.SigIntegrity]) AS value\n) AS stability_attrs\nGROUP BY \n    sa.SignalRegistry, sa.SignalClass, sa.SSM, sa.EntropyVal, sa.ModType, sa.ModIndex;"
+    ]
+  }
+]

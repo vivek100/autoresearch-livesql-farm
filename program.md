@@ -5,30 +5,50 @@ Read this first before editing code or running experiments.
 
 ## 1) Mission
 
-Improve question-answer accuracy on Spider benchmark slices using a strict keep/discard loop.
+Improve SQL generation accuracy on LiveSQLBench benchmark using a strict keep/discard loop.
 
-The runtime is fixed to:
+This is an **autoresearch repo** — AI agents (like Claude Code) are expected to:
+- Read prior run results and RCA
+- Form hypotheses about failure patterns
+- Edit candidate code (prompt, tools, agent wiring)
+- Run experiments and evaluate
+- Keep or discard changes based on metric deltas
+- Repeat autonomously without human intervention
 
-1. LangGraph built-in ReAct agent
-2. SQL + schema tools (v0)
-3. local JSON/JSONL artifact logging
+The runtime is:
+
+1. **OpenAI GPT-5.4-mini** via langchain-openai ChatOpenAI
+2. LangGraph ReAct agent (`langgraph.prebuilt.create_react_agent`)
+3. **Ghost PostgreSQL** `describe_schema` + `execute_sql` tools (via Ghost CLI)
+4. Execution-based scoring: predicted SQL vs gold SQL both run against PostgreSQL via Ghost
+5. Local JSON/JSONL artifact logging with timing instrumentation
+
+### Scoring Model
+
+Two metrics are tracked per run:
+
+- **executable_rate**: fraction of questions where the agent's SQL executes without error
+- **result_match_rate**: fraction of questions where both predicted and gold SQL execute and produce identical normalized rows (this is the primary accuracy metric)
+
+Gold SQL is native PostgreSQL (uses STDDEV, JSON functions, CTEs, lateral joins, etc.). Scoring runs both predicted and gold SQL on the same Ghost PostgreSQL instance.
 
 ## 2) Repository Surfaces
 
 ### Mutable during normal candidate loop
 
-1. `analytics-agent-autoresearch/candidate/prompt.py`
-2. `analytics-agent-autoresearch/candidate/tools.py`
-3. `analytics-agent-autoresearch/candidate/agent_graph.py`
-4. `analytics-agent-autoresearch/candidate/response_parser.py`
-5. `analytics-agent-autoresearch/candidate/tracing.py`
-6. `analytics-agent-autoresearch/candidate/observability.py`
+1. `candidate/prompt.py` — system prompt (primary improvement lever)
+2. `candidate/tools.py` — Ghost PostgreSQL tool definitions
+3. `candidate/agent_graph.py` — agent wiring, caching, and run logic
+4. `candidate/response_parser.py` — output parsing
+5. `candidate/llm.py` — LLM configuration (model, temperature, timeout)
+6. `candidate/react.py` — ReAct agent builder with safe tool wrapping
+7. `candidate/tracing.py` — local callback trace handler
 
 ### Read-only during normal candidate loop
 
-1. `analytics-agent-autoresearch/harness/*`
-2. benchmark dataset and gold SQL
-3. scoring version logic
+1. `harness/*` — benchmark runner, scorer, RCA, trace writer
+2. `data/livesqlbench/dataset.json` — benchmark questions + gold SQL
+3. `data/livesqlbench/livesqlbench_gt_kg_testcases_0528.jsonl` — full 270-question ground truth
 
 Harness changes are allowed only in explicit harness-maintenance mode.
 
@@ -36,60 +56,62 @@ Harness changes are allowed only in explicit harness-maintenance mode.
 
 Read these files every session:
 
-1. `analytics-agent-autoresearch/README.md`
-2. `analytics-agent-autoresearch/program.md` (this file)
-3. `analytics-agent-autoresearch/results.tsv` (latest rows)
-4. latest run folder summary:
-   - `analytics-agent-autoresearch/runs/<latest_run>/summary.json`
-   - `analytics-agent-autoresearch/runs/<latest_run>/aggregate_rca.json`
+1. `program.md` (this file)
+2. `results.tsv` (latest rows)
+3. Latest run folder summary:
+   - `runs/<latest_run>/summary.json`
+   - `runs/<latest_run>/aggregate_rca.json`
+   - `runs/<latest_run>/predictions.jsonl` (scan for failure patterns)
 
 ## 4) Environment + Data Checks
 
-Use parent venv:
+Use project venv:
 
-1. `.\.venv\Scripts\python.exe --version`
+1. `.venv\Scripts\python.exe --version`
 
-Env variables:
+Env variables (set in `.env`):
 
-1. `MISTRAL_API_KEY` (required)
-2. `SPIDER_ROOT` (optional override)
-3. `TRACE_BACKEND` (optional; default `phoenix`, set `none` to disable)
-4. `PHOENIX_COLLECTOR_ENDPOINT` (optional; default `http://127.0.0.1:6006/v1/traces`)
+1. `OPENAI_API_KEY` (required — OpenAI API key)
+2. `OPENAI_MODEL` (optional — defaults to `gpt-5.4-mini`)
+3. `GHOST_DB_ID` (required — Ghost database instance ID, get from `ghost list`)
+4. `LIVESQL_ROOT` (optional — path to LiveSQLBench data, defaults to `data/livesqlbench`)
+5. `TRACE_BACKEND` (optional — `none`, default `none`)
 
-If collector endpoint is unreachable, tracing is auto-disabled for that process and execution continues.
-Run trace artifacts include `phoenix_spans` JSON per question for local inspection.
+Ghost CLI must be installed at `C:\Users\shukl\AppData\Local\Programs\Ghost\ghost.exe`.
 
-Benchmark data expected:
+Benchmark data expected at `LIVESQL_ROOT` or `data/livesqlbench/`:
 
-1. `<SPIDER_ROOT>/dev.json`
-2. `<SPIDER_ROOT>/database/<db_id>/<db_id>.sqlite`
+1. `dataset.json` — LiveSQLBench questions with `sol_sql` gold SQL arrays
+2. `livesqlbench_gt_kg_testcases_0528.jsonl` — full ground truth + knowledge IDs
 
-If not using `SPIDER_ROOT`, fallback paths are handled in code.
+Ghost database must have schemas matching `db_id` values in dataset (e.g. `alien`).
 
-## 5) Branch + Lineage Workflow
+### Ghost Database Setup
 
-Always run experiments on explicit experiment branches.
+Ghost databases are cloud PostgreSQL instances managed via the Ghost CLI:
 
-Useful commands:
+```
+ghost list                          # show available databases
+ghost connect <id>                  # get connection string
+ghost sql <id> "SELECT 1"           # run a query
+echo "SELECT 1" | ghost sql <id>    # run via stdin (preferred — avoids quoting issues)
+```
 
-1. `.\.venv\Scripts\python.exe analytics-agent-autoresearch/cli/branch.py status`
-2. `.\.venv\Scripts\python.exe analytics-agent-autoresearch/cli/branch.py create --series s1 --lane small --iteration 0 --switch`
-3. `.\.venv\Scripts\python.exe analytics-agent-autoresearch/cli/branch.py start-from-run --run-id <run_id> --switch`
+The benchmark uses `ghost sql` via stdin for both agent tools and scoring.
 
-Lineage fields must be passed on run commands when restarting:
+## 5) Benchmark Commands
 
-1. `--from-run <run_id>`
-2. `--from-git-ref <commit_or_tag>`
+Smoke loop (fast iteration, 3 questions):
 
-## 6) Benchmark Commands
+1. `.venv\Scripts\python.exe -m cli.run --split smoke --limit 3`
 
-Smoke loop:
+Medium check (10 questions = full alien dataset):
 
-1. `.\.venv\Scripts\python.exe analytics-agent-autoresearch/cli/run.py --split smoke --limit 25 --lane small`
+1. `.venv\Scripts\python.exe -m cli.run --split full --limit 10`
 
 Full check:
 
-1. `.\.venv\Scripts\python.exe analytics-agent-autoresearch/cli/run.py --split full --limit 150 --lane small`
+1. `.venv\Scripts\python.exe -m cli.run --split full`
 
 Recommended metadata fields each run:
 
@@ -98,84 +120,58 @@ Recommended metadata fields each run:
 3. `--candidate-version "candidate_vX"`
 4. `--prompt-version "prompt_vX"`
 5. `--tags "tag1,tag2"`
-6. `--metadata-json "{\"hypothesis\":\"...\",\"owner\":\"agent\"}"`
 
-## 7) RCA Workflow
+## 6) Keep/Discard Decision Policy
 
-For each run:
-
-1. Generate RCA:
-   - `.\.venv\Scripts\python.exe analytics-agent-autoresearch/cli/rca.py generate --run-id <run_id>`
-2. Summarize RCA:
-   - `.\.venv\Scripts\python.exe analytics-agent-autoresearch/cli/rca.py summarize --run-id <run_id>`
-3. If deterministic tags are wrong, update rows:
-   - `.\.venv\Scripts\python.exe analytics-agent-autoresearch/cli/rca.py update --run-id <run_id> --question-id <qid> --tag <tag> --rca-type candidate_fix --confidence high --manual-notes "reason"`
-4. Link known fixes:
-   - `.\.venv\Scripts\python.exe analytics-agent-autoresearch/cli/rca.py link-fix --run-id <run_id> --question-id <qid> --fix-id <fix_id>`
-
-RCA outputs:
-
-1. `runs/<run_id>/rca.jsonl`
-2. `runs/<run_id>/aggregate_rca.json`
-3. `runs/<run_id>/rca_updates.jsonl`
-4. `runs/<run_id>/fix_links.jsonl`
-
-## 8) Prompt Governance Rules
-
-Before accepting prompt changes:
-
-1. `.\.venv\Scripts\python.exe analytics-agent-autoresearch/cli/prompt_guard.py check --max-chars 5000 --max-tokens-est 1400`
-2. If comparing prompt revisions:
-   - `.\.venv\Scripts\python.exe analytics-agent-autoresearch/cli/prompt_guard.py diff --old-prompt-file <old> --new-prompt-file <new> --max-delta-chars 500`
-
-Prompt updates require:
-
-1. repeated RCA pattern evidence (not one-off failures)
-2. rationale in run `--notes` and `--metadata-json`
-
-## 9) Keep/Discard Decision Policy
-
-After each smoke run:
+After each run:
 
 1. Compare to prior best run in same lane + harness version tuple.
-2. Keep if accuracy improves and failure profile does not regress materially.
-3. Discard if accuracy regresses or improvement is noisy/unjustified complexity.
+2. Primary metric: `result_match_rate`.
+3. Secondary metric: `executable_rate`.
+4. Keep if result_match_rate improves and executable_rate does not regress.
+5. Discard if either metric regresses or improvement is noisy/unjustified complexity.
 
 Log every decision in `results.tsv`:
 
-`commit	run_id	model_lane	split	accuracy	status	description`
+`run_id	split	total	executable_rate	result_match_rate	status	description`
 
-Statuses:
+Statuses: `keep`, `discard`, `crash`
 
-1. `keep`
-2. `discard`
-3. `crash`
-
-## 10) Iteration Loop (Autonomous)
+## 7) Iteration Loop (Autonomous)
 
 Repeat:
 
 1. Read latest `results.tsv` and latest RCA summary.
-2. Choose one focused hypothesis.
-3. Edit candidate files only.
-4. Run smoke benchmark.
-5. Generate RCA and review.
-6. Apply keep/discard decision.
-7. Periodically run full benchmark for confirmation.
+2. Scan `predictions.jsonl` for failure patterns (predicted_error, gold_error, result_match).
+3. Choose one focused hypothesis targeting:
+   - Non-executable SQL → fix schema inspection or SQL generation in prompt
+   - Executable but wrong results → fix aggregation/filter/join logic in prompt
+   - Empty result handling → improve null/empty response contract
+   - Missing domain knowledge → add external knowledge hints to prompt
+4. Edit candidate files only (primarily `prompt.py`).
+5. Run smoke benchmark (`--limit 3`).
+6. Generate RCA and review.
+7. Apply keep/discard decision.
+8. Periodically run full benchmark (`--limit 10`) for confirmation.
 
 Do not stop to ask for permission between iterations unless blocked by missing credentials/data or critical runtime failures.
 
-## 11) Harness-Maintenance Mode (Separate)
+### Key Improvement Levers
 
-Only in dedicated maintenance branch:
+In priority order:
 
-1. change scorer logic
-2. change benchmark selection policy
-3. change trace schema
-4. change deterministic RCA classifier
+1. **System prompt** (`candidate/prompt.py`) — workflow instructions, SQL rules, few-shot examples
+2. **Tool descriptions** (`candidate/tools.py`) — help the model understand what each tool returns
+3. **Response parser** (`candidate/response_parser.py`) — extract SQL and answers more reliably
+4. **Agent wiring** (`candidate/agent_graph.py`) — max iterations, fallback behavior
 
-When done:
+### Known Challenges
 
-1. bump versions in `harness/versions.py`
-2. mark new experiment series
-3. avoid direct cross-series comparisons without caveats
+1. **External knowledge**: Questions reference domain-specific formulas (TOLS, SNQI, LIF, etc.) via `external_knowledge` IDs. The knowledge base files (`*_kb.jsonl`) are not yet available locally. The agent must infer meaning from column names or the prompt must provide hints.
+2. **Ghost flakiness**: Ghost CLI occasionally returns "database is not yet ready" — retries may be needed.
+3. **Result comparison**: Scorer normalizes all values to lowercase strings for comparison. Floating-point precision differences or column ordering can cause false negatives.
+
+## 8) Architecture History
+
+- **v0 (Kimi-K2.5 + SQLite)**: Initial setup using Tinker API proxy to Kimi-K2.5. Extremely slow (~5-7 min/question) due to thinking mode and Tinker proxy latency. Gold SQL was PostgreSQL dialect that mostly failed on SQLite (3/10 executable). Abandoned.
+- **v1 (GPT-5.4-mini + Ghost PostgreSQL)**: Current setup. ~6-9s per question. Gold SQL runs natively on PostgreSQL. Scoring works correctly. First correct answer achieved on alien_2.

@@ -3,15 +3,12 @@ from __future__ import annotations
 """
 Local benchmark runner that writes all artifacts to disk.
 
-This module is intentionally local-first:
-- no required W&B/Weave dependency in the critical path
-- every run produces inspectable JSON/JSONL outputs
+Uses Ghost PostgreSQL databases for both agent execution and scoring.
 """
 
 import json
 import os
 import random
-import sqlite3
 import string
 import subprocess
 import sys
@@ -28,7 +25,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from candidate.agent_graph import run_candidate_question  # noqa: E402
 from harness.rca import generate_rca_for_run  # noqa: E402
-from harness.scorer import extract_gold_value, score  # noqa: E402
+from harness.scorer import score_execution  # noqa: E402
 from harness.traces import TraceWriter, build_run_paths  # noqa: E402
 from harness.versions import BENCHMARK_VERSION, RCA_VERSION, SCORER_VERSION, TRACE_SCHEMA_VERSION  # noqa: E402
 
@@ -42,25 +39,21 @@ def load_env() -> None:
         load_dotenv(root_env, override=False)
 
 
-def resolve_spider_root() -> Path:
-    env_root = os.environ.get("SPIDER_ROOT")
+def resolve_livesql_root() -> Path:
+    env_root = os.environ.get("LIVESQL_ROOT")
     if env_root:
         return Path(env_root)
-    fallback = Path(r"C:\spider_data\spider_data")
-    if fallback.exists():
-        return fallback
-    local_new = PROJECT_ROOT / "data" / "spider"
-    if local_new.exists():
-        return local_new
-    return Path("analytics-agent/data/spider")
+    local = PROJECT_ROOT / "data" / "livesqlbench"
+    if local.exists():
+        return local
+    return Path("data/livesqlbench")
 
 
-def run_gold_sql(db_path: Path, sql: str) -> list[tuple[Any, ...]]:
-    conn = sqlite3.connect(db_path.as_posix())
-    try:
-        return conn.execute(sql).fetchall()
-    finally:
-        conn.close()
+def resolve_ghost_db_id() -> str:
+    db_id = os.environ.get("GHOST_DB_ID")
+    if not db_id:
+        raise RuntimeError("GHOST_DB_ID is not set. Run 'ghost list' to find your DB ID.")
+    return db_id
 
 
 def now_iso() -> str:
@@ -103,7 +96,7 @@ def run_benchmark(
     split: str = "smoke",
     limit: int = 25,
     offset: int = 0,
-    model_name: str = "mistral-small-latest",
+    model_name: str = "openai",
     run_id: str | None = None,
     lane: str = "small",
     parent_run_id: str | None = None,
@@ -117,13 +110,11 @@ def run_benchmark(
 ) -> dict[str, Any]:
     """Run benchmark slice and emit manifest, summary, traces, predictions, failures, and RCA."""
     load_env()
-    spider_root = resolve_spider_root()
-    dev_path = spider_root / "dev.json"
-    db_root = spider_root / "database"
+    ghost_db_id = resolve_ghost_db_id()
+    livesql_root = resolve_livesql_root()
+    dev_path = livesql_root / "dataset.json"
     if not dev_path.exists():
-        raise FileNotFoundError(f"dev.json not found at {dev_path.as_posix()}")
-    if not db_root.exists():
-        raise FileNotFoundError(f"database path not found at {db_root.as_posix()}")
+        raise FileNotFoundError(f"dataset.json not found at {dev_path.as_posix()}")
 
     with dev_path.open("r", encoding="utf-8") as f:
         dev_rows = json.load(f)
@@ -156,40 +147,60 @@ def run_benchmark(
         "git_sha": get_git_sha(),
         "parent_run_id": parent_run_id,
         "parent_git_ref": parent_git_ref,
+        "ghost_db_id": ghost_db_id,
         "extra_metadata": extra_metadata or {},
     }
     writer.write_manifest(manifest)
 
     total = 0
     correct_count = 0
+    executable_count = 0
+    gold_executable_count = 0
+    result_match_count = 0
+    result_scoreable_count = 0
     skipped = 0
     latencies: list[int] = []
 
     for idx, ex in enumerate(selected):
-        # Each selected Spider row becomes one local trace + prediction record.
-        question_id = f"spider_{offset + idx}"
+        instance_id = str(ex.get("instance_id", f"q_{idx}"))
+        question_id = f"livesql_{instance_id}"
         question = str(ex.get("question"))
         db_id = str(ex.get("db_id"))
-        gold_sql = str(ex.get("query"))
-        db_path = db_root / db_id / f"{db_id}.sqlite"
-        if not db_path.exists():
-            skipped += 1
-            continue
+        gold_sql_raw = ex.get("sol_sql")
+        if isinstance(gold_sql_raw, list) and gold_sql_raw:
+            gold_sql = str(gold_sql_raw[0])
+        else:
+            gold_sql = str(gold_sql_raw) if gold_sql_raw else ""
 
-        gold_rows = run_gold_sql(db_path=db_path, sql=gold_sql)
-        expected_value = extract_gold_value(gold_rows)
         candidate = run_candidate_question(
             question=question,
             db_id=db_id,
-            db_path=db_path.as_posix(),
+            ghost_db_id=ghost_db_id,
             model_name=model_name,
         )
         candidate_dict = candidate.to_dict()
         latencies.append(int(candidate_dict.get("artifacts", {}).get("latency_ms", 0)))
-        is_correct = score(candidate.answer.normalized, gold_rows)
+
+        # Execution-based scoring via Ghost PostgreSQL
+        predicted_sql = candidate.final_sql or ""
+        exec_score = score_execution(
+            ghost_db_id=ghost_db_id,
+            schema=db_id,
+            predicted_sql=predicted_sql,
+            gold_sql=gold_sql,
+        )
+
         total += 1
-        if is_correct:
-            correct_count += 1
+        if exec_score["predicted_executable"]:
+            executable_count += 1
+        if exec_score["gold_executable"]:
+            gold_executable_count += 1
+        if exec_score["result_match"] is not None:
+            result_scoreable_count += 1
+            if exec_score["result_match"]:
+                result_match_count += 1
+                correct_count += 1
+        is_correct = exec_score.get("result_match", False) or False
 
         prediction_row = {
             "timestamp": now_iso(),
@@ -198,14 +209,21 @@ def run_benchmark(
             "question": question,
             "db_id": db_id,
             "correct": is_correct,
+            "predicted_executable": exec_score["predicted_executable"],
+            "gold_executable": exec_score["gold_executable"],
+            "result_match": exec_score["result_match"],
+            "predicted_error": exec_score["predicted_error"],
+            "gold_error": exec_score["gold_error"],
+            "predicted_row_count": exec_score["predicted_row_count"],
+            "gold_row_count": exec_score["gold_row_count"],
             "status": candidate.status,
             "error": candidate.error,
-            "expected_value": expected_value,
             "answer_raw": candidate.answer.raw,
             "answer_normalized": candidate.answer.normalized,
             "answer_kind": candidate.answer.kind,
             "answer_text": candidate_dict.get("artifacts", {}).get("answer_text"),
             "final_sql": candidate.final_sql,
+            "gold_sql": gold_sql,
             "steps_used": candidate.steps_used,
             "latency_ms": candidate_dict.get("artifacts", {}).get("latency_ms"),
             "model_name": model_name,
@@ -224,7 +242,6 @@ def run_benchmark(
             writer.append_failure(prediction_row)
 
         trace_payload = {
-            # Per-question trace file keeps enough evidence for RCA/debugging.
             "trace_id": f"trace_{question_id}",
             "question_id": question_id,
             "question": question,
@@ -240,6 +257,7 @@ def run_benchmark(
             "phoenix_spans": candidate_dict.get("artifacts", {}).get("phoenix_spans", []),
             "final": {
                 "status": candidate.status,
+                "error": candidate.error,
                 "final_sql": candidate.final_sql,
                 "answer_raw": candidate.answer.raw,
                 "answer_normalized": candidate.answer.normalized,
@@ -248,12 +266,16 @@ def run_benchmark(
             "observability": candidate_dict.get("artifacts", {}).get("observability"),
             "score": {
                 "correct": is_correct,
-                "gold_value": expected_value,
+                "predicted_executable": exec_score["predicted_executable"],
+                "gold_executable": exec_score["gold_executable"],
+                "result_match": exec_score["result_match"],
             },
         }
         writer.write_trace(question_id=question_id, trace_payload=trace_payload)
 
-    accuracy = (correct_count / total) if total else 0.0
+    exec_rate = (executable_count / total) if total else 0.0
+    result_match_rate = (result_match_count / result_scoreable_count) if result_scoreable_count else 0.0
+    accuracy = result_match_rate
     mean_latency = (sum(latencies) / len(latencies)) if latencies else 0.0
     summary = {
         "run_id": resolved_run_id,
@@ -263,7 +285,13 @@ def run_benchmark(
         "questions_total": total,
         "questions_correct": correct_count,
         "questions_skipped": skipped,
-        "accuracy": accuracy,
+        "executable_count": executable_count,
+        "executable_rate": round(exec_rate, 4),
+        "gold_executable_count": gold_executable_count,
+        "result_scoreable_count": result_scoreable_count,
+        "result_match_count": result_match_count,
+        "result_match_rate": round(result_match_rate, 4),
+        "accuracy": round(accuracy, 4),
         "latency_mean_ms": round(mean_latency, 2),
         "model_name": model_name,
         "model_lane": lane,
