@@ -34,7 +34,7 @@ HERE = Path(__file__).resolve()
 PROJECT_ROOT = HERE.parents[1]
 
 SANDBOX_IMAGE = os.getenv("FARM_SANDBOX_IMAGE", "blaxel/py-app:latest")
-SANDBOX_MEMORY = int(os.getenv("FARM_SANDBOX_MEMORY", "2048"))
+SANDBOX_MEMORY = int(os.getenv("FARM_SANDBOX_MEMORY", "4096"))
 SANDBOX_REGION = os.getenv("BL_REGION", "us-pdx-1")
 QUESTIONS_PER_SANDBOX = int(os.getenv("FARM_QUESTIONS_PER_SANDBOX", "4"))
 
@@ -151,11 +151,22 @@ async def setup_sandbox(
             print(f"  [setup]  {name} git clone failed: {stderr}")
             return False
 
-        # Install Python dependencies
+        # Install Python dependencies (slim sandbox requirements — no Phoenix/OTel)
         print(f"  [setup]  {name} pip installing...")
+        req_file = "/project/requirements-sandbox.txt"
+        # Fall back to full requirements if sandbox file doesn't exist
+        check = await sandbox.process.exec({
+            "name": "check-req",
+            "command": f"test -f {req_file} && echo ok || echo missing",
+            "wait_for_completion": True,
+            "timeout": 10,
+        })
+        stdout = getattr(check, "stdout", "") or ""
+        if "missing" in stdout:
+            req_file = "/project/requirements.txt"
         result = await sandbox.process.exec({
             "name": "pip-install",
-            "command": "pip install -r /project/requirements.txt",
+            "command": f"pip install -r {req_file}",
             "working_dir": "/project",
             "wait_for_completion": True,
             "timeout": 180,
@@ -577,7 +588,9 @@ async def run_farm(
     states: list[SandboxState] = []
 
     for batch in batches:
-        sname = f"farm-{resolved_run_id[:20]}-{batch.batch_id}".lower().replace("_", "-")[:63]
+        # Blaxel requires lowercase alphanumeric + hyphens, no double hyphens
+        slug = _random_suffix(8)
+        sname = f"farm-{slug}-b{batch.batch_id}"
         states.append(SandboxState(batch=batch, sandbox_name=sname))
 
     async def create_and_setup(state: SandboxState) -> bool:
